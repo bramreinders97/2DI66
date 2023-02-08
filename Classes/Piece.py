@@ -3,9 +3,22 @@ class Piece:
     # will have their own possible_next_locations function
 
     def __init__(self, player, piece_type):
+
+        # Naming convention for type: (I would choose it like this since it is short and unambiguous)
+        # White     =>  W   (type: string)
+        # Black     =>  B   (type: string)
         self.player = player  # White or Black, or 1/2 not sure what is more useful
+
         self.switches_left = 5  # Number of allowed column switches left
         # I'm not really sure if this should be stored her or in the Game/Board class
+
+        # Naming convention for type:
+        # Pawn      =>  P    (type: string)
+        # Rook      =>  R    (type: string)
+        # Knight    =>  N    (type: string)
+        # Bishop    =>  B    (type: string)
+        # Queen     =>  Q    (type: string)
+        # King      =>  K    (type: string)
         self.type = piece_type  # rook, knight, etc
 
     def possible_next_locations(self, row, col):
