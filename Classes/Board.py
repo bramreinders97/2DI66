@@ -84,6 +84,7 @@ class Board:
 
     def __str__(self):
 
+        # The colours may appear different depending on light or dark mode.
         fig_dict = {
             "WP": "♟", "BP": "♙",
             "WR": "♜", "BR": "♖",
@@ -103,7 +104,6 @@ class Board:
             ret_str += str(4-i) + "|"
             for j in range(len(self.board)):
                 if self.board[i][j]:
-
                     ret_str += "  "
                     ret_str += fig_dict[self.board[i][j].player + self.board[i][j].type]
                     ret_str += "  "
