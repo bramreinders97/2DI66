@@ -12,3 +12,7 @@ class Piece:
         # this piece can go. E.g. if a pawn is now at 1,0 and self.player == black, this
         # function returns [(2,0)]
         pass
+
+    def __str__(self):
+        #return coloured letter of this piece
+        pass

@@ -27,7 +27,9 @@ class Board:
     def choose_next_move(self, strategy):
         # Select a next move for a player based on their strategy and the output
         # of self.get_possible_moves
-        pass
+        moves = self.get_possible_moves(self)
+        self.make_move(np.random.choice(moves))
+        return
 
     def __str__(self):
         # Create function to nicely print state of board
