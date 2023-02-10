@@ -41,7 +41,7 @@ class Board:
         self.place_figure_on_board(4, 3, "B", "N")
         self.place_figure_on_board(0, 1, "W", "N")
 
-        # Initialise Knights
+        # Initialise Bishops
         self.place_figure_on_board(4, 2, "B", "B")
         self.place_figure_on_board(0, 2, "W", "B")
 
@@ -54,7 +54,6 @@ class Board:
         self.place_figure_on_board(0, 4, "W", "K")
 
         return True
-
 
     def make_move(self, current_location, new_location):
         # Not sure if these are the smartest parameters. I was
@@ -105,7 +104,8 @@ class Board:
             for j in range(len(self.board)):
                 if self.board[i][j]:
                     ret_str += "  "
-                    ret_str += fig_dict[self.board[i][j].player + self.board[i][j].type]
+                    ret_str += fig_dict[self.board[i]
+                                        [j].player + self.board[i][j].type]
                     ret_str += "  "
                 else:
                     ret_str += "  ⋅  "
