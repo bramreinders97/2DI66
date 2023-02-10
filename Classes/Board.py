@@ -7,11 +7,14 @@ class Board:
 
         # Declaration of the array with object as data type.
         self.board = np.ndarray((size, size), dtype=object)
+        self.size = size
 
         # Initialise all values with "False" as default.
         for i in range(size):
             for j in range(size):
                 self.board[i][j] = False
+
+
 
     def place_figure_on_board(self, row, column, player, piece_type):
         # a little function in order to place one individual figure on the board
@@ -66,7 +69,7 @@ class Board:
         # who won
         pass
 
-    def get_possible_moves(self):
+    def get_possible_moves(self, player):
         # Check whose turn it is, and which moves this player can make
         # using the current state of the board and the piece.possible_next_locations
         # funtion. It should not be possible to make a move to a location containing
@@ -74,12 +77,34 @@ class Board:
         # which puts your own king in check
         pass
 
-    def choose_next_move(self, strategy):
+    def choose_next_move(self, player):
         # Select a next move for a player based on their strategy and the output
         # of self.get_possible_moves
-        moves = self.get_possible_moves(self)
+        moves = self.get_possible_moves(self, player)
         self.make_move(np.random.choice(moves))
         return
+
+    def detect_check(self, player):
+        """
+        Check whether the current player is in check. Return true if they are.
+
+        :param player: the current player
+        :return: bool
+        """
+        # what moves can the opponent do next turn
+        moves = self.get_possible_moves(self, !player)
+
+        # find location for our king:
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.board[i][j].type == "K":
+                    king_location = (i, j)
+
+        # check for each move if it contains our king
+        for move in moves:
+            if move[1] == king_location:
+                return True
+        return False
 
     def __str__(self):
 
