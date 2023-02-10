@@ -101,6 +101,10 @@ class NextMovesGenerator:
         else:
             board = _board.copy()
 
+        BBoard = Board(5, q4=True)
+        BBoard.board = board
+        print(BBoard)
+
         # find location for our king:
         for i in range(len(_board)):
             for j in range(len(_board)):
@@ -110,14 +114,22 @@ class NextMovesGenerator:
                 except AttributeError:
                     continue
 
+        print(k_loc)
         # go through enemy piece types and areas they can be in
         # pawn
         locs = [[-1, -1], [1, -1]]
         for loc in locs:
             try:
-                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                x = k_loc[0] + loc[0]
+                y = k_loc[1] + loc[1]
+                if x < 0 or y < 0:
+                    continue
+                    #skip locations under 0
+                piece = board[x][y]
                 if type(piece) == Piece:
+                    print(piece.player, player, loc, piece, [k_loc[0] + loc[0], k_loc[1] + loc[1]])
                     if piece.type == "P" and piece.player != player:
+                        print("P")
                         return True
             except IndexError:
                 pass
@@ -129,9 +141,15 @@ class NextMovesGenerator:
         locs = [[-1, -2], [1, -2], [-2, -1], [2, -1]]
         for loc in locs:
             try:
-                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                x = k_loc[0] + loc[0]
+                y = k_loc[1] + loc[1]
+                if x < 0 or y < 0:
+                    continue
+                    # skip locations under 0
+                piece = board[x][y]
                 if type(piece) == Piece:
                     if piece.type == "N" and piece.player != player:
+                        print("N")
                         return True
             except IndexError:
                 pass
@@ -145,9 +163,15 @@ class NextMovesGenerator:
         for line in loclines:
             for loc in line:
                 try:
-                    piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                    x = k_loc[0] + loc[0]
+                    y = k_loc[1] + loc[1]
+                    if x < 0 or y < 0:
+                        continue
+                        # skip locations under 0
+                    piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "B"] and piece.player != player:
+                            print("QB")
                             return True
                         else:
                             break
@@ -163,9 +187,15 @@ class NextMovesGenerator:
         for line in loclines:
             for loc in line:
                 try:
-                    piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                    x = k_loc[0] + loc[0]
+                    y = k_loc[1] + loc[1]
+                    if x < 0 or y < 0:
+                        continue
+                        # skip locations under 0
+                    piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "R"] and piece.player != player:
+                            print("QR")
                             return True
                         else:
                             break
@@ -179,9 +209,15 @@ class NextMovesGenerator:
         locs = [[-1, -1], [0, -1], [1, -1], [1, 0], [-1, 0]]
         for loc in locs:
             try:
-                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                x = k_loc[0] + loc[0]
+                y = k_loc[1] + loc[1]
+                if x < 0 or y < 0:
+                    continue
+                    # skip locations under 0
+                piece = board[x][y]
                 if type(piece) == Piece:
                     if piece.type == "K" and piece.player != player:
+                        print("K")
                         return True
             except IndexError:
                 pass
