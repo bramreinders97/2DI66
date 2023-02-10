@@ -36,40 +36,47 @@ class Board:
 
         # Initialise Pawns
         for i in range(5):
-            self.place_figure_on_board(3, i, "B", "P", self.q4 + 1)
-            self.place_figure_on_board(1, i, "W", "P", self.q4 + 1)
+            self.place_figure_on_board(3, i, 1, "P", self.q4 + 1)
+            self.place_figure_on_board(1, i, 0, "P", self.q4 + 1)
 
         # Initialise Rooks
-        self.place_figure_on_board(4, 4, "B", "R", inf)
-        self.place_figure_on_board(0, 0, "W", "R", inf)
+        self.place_figure_on_board(4, 4, 1, "R", inf)
+        self.place_figure_on_board(0, 0, 0, "R", inf)
 
         # Initialise Knights
-        self.place_figure_on_board(4, 3, "B", "N", 1)
-        self.place_figure_on_board(0, 1, "W", "N", 1)
+        self.place_figure_on_board(4, 3, 1, "N", 1)
+        self.place_figure_on_board(0, 1, 0, "N", 1)
 
         # Initialise Bishops
-        self.place_figure_on_board(4, 2, "B", "B", inf)
-        self.place_figure_on_board(0, 2, "W", "B", inf)
+        self.place_figure_on_board(4, 2, 1, "B", inf)
+        self.place_figure_on_board(0, 2, 0, "B", inf)
 
         # Initialise Queens
-        self.place_figure_on_board(4, 1, "B", "Q", inf)
-        self.place_figure_on_board(0, 3, "W", "Q", inf)
+        self.place_figure_on_board(4, 1, 1, "Q", inf)
+        self.place_figure_on_board(0, 3, 0, "Q", inf)
 
         # Initialise Kings
-        self.place_figure_on_board(4, 0, "B", "K", 1)
-        self.place_figure_on_board(0, 4, "W", "K", 1)
+        self.place_figure_on_board(4, 0, 1, "K", 1)
+        self.place_figure_on_board(0, 4, 0, "K", 1)
 
         return True
 
     def make_move(self, current_location, new_location):
         """
-        Move a piece from current_location to new_location
+        Move a piece from current_location to new_location.
+        Also update the numbers of column switches allowed for 
+        the moved piece if necessary
 
         :param current_location: tuple of form (row, col)
         :param new_location: tuple of form (row, col)
         """
         # Check what piece we're moving
         piece_to_move = self.board[current_location]
+
+        # Reduce the number of column switches still allowed
+        # there has been a column switch
+        if current_location[1] is not new_location[1]:
+            piece_to_move.switches_left -= 1
 
         # Remove piece from current location
         self.board[current_location] = False
@@ -81,49 +88,6 @@ class Board:
         c = Board()
         c.board = self.board.copy()
         return c
-
-    def evaluate_board(self):
-        # Evaluate whether or not the game is finished, and if so
-        # who won
-        pass
-
-    def get_possible_moves(self, player):
-        # Check whose turn it is, and which moves this player can make
-        # using the current state of the board and the piece.possible_next_locations
-        # funtion. It should not be possible to make a move to a location containing
-        # another piece of the same color. Also, you should not be able to make a move
-        # which puts your own king in check
-        pass
-
-    def choose_next_move(self, player):
-        # Select a next move for a player based on their strategy and the output
-        # of self.get_possible_moves
-        moves = self.get_possible_moves(self, player)
-        self.make_move(np.random.choice(moves))
-        return
-
-    def detect_check(self, player):
-        """
-        Check whether the current player is in check. Return true if they are.
-
-        :param player: the current player
-        :return: bool
-        """
-        pass
-        # # what moves can the opponent do next turn
-        # # moves = self.get_possible_moves(self, !player)
-
-        # # find location for our king:
-        # for i in range(self.size):
-        #     for j in range(self.size):
-        #         if self.board[i][j].type == "K":
-        #             king_location = (i, j)
-
-        # # check for each move if it contains our king
-        # # for move in moves:
-        #     if move[1] == king_location:
-        #         return True
-        # return False
 
     def __str__(self):
 

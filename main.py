@@ -1,22 +1,26 @@
-# Import the Simulator class and answer questions
-
+import numpy as np
 from Classes.Board import Board
 from Classes.NextMovesGenerator import NextMovesGenerator
 
 board = Board(5, q4=True)
 
-board.make_move((4, 3), (2, 0))
-
 print(board)
 
-# Check possible moves
-loc_piece = [0, 1]
-piece = board.board[loc_piece[0], loc_piece[1]]
+################ How to use my (Bram) part ################
 
-# pawn at 1,0
-next_moves_gen = NextMovesGenerator(board, piece.player)
-directions = piece.directions()
+next_player = 0  # 0 if it is white's turn, 1 if it is blacks turn
 
-for direction in directions:
-    moves = next_moves_gen.check_possible_moves(loc_piece, direction)
-    print(direction.direction, next_moves_gen.possible_moves)
+# create new NextMovesGenerator object
+next_moves_gen = NextMovesGenerator(board, next_player)
+
+# Randomly choose a next move
+next_move = next_moves_gen.choose_next_move()
+print(next_move)
+
+# check all possible moves
+print(next_moves_gen.possible_moves)
+
+################ What I did to get incorrect detect_check_value ################
+
+# This should return False, however it returns True
+print(f"result detect check: {next_moves_gen.detect_check(board.board, 1)}")

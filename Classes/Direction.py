@@ -15,3 +15,6 @@ class Direction:
         self.limit = limit
         self.must_hit = must_hit
         self.can_hit = can_hit
+
+    def __str__(self):
+        return f"{self.direction}"
