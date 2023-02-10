@@ -62,30 +62,32 @@ class Board:
         return True
 
     def make_move(self, current_location, new_location):
-        # Not sure if these are the smartest parameters. I was
-        # thinking if you provide for example (1,0) and (2,0)
-        # it moves the piece on 1,0 -> 2,0
-        pass
+        """
+        Move a piece from current_location to new_location.
+        Also update the numbers of column switches allowed for 
+        the moved piece if necessary
 
-    def evaluate_board(self):
-        # Evaluate whether or not the game is finished, and if so
-        # who won
-        pass
+        :param current_location: tuple of form (row, col)
+        :param new_location: tuple of form (row, col)
+        """
+        # Check what piece we're moving
+        piece_to_move = self.board[current_location]
 
-    def get_possible_moves(self, player):
-        # Check whose turn it is, and which moves this player can make
-        # using the current state of the board and the piece.possible_next_locations
-        # funtion. It should not be possible to make a move to a location containing
-        # another piece of the same color. Also, you should not be able to make a move
-        # which puts your own king in check
-        pass
+        # Reduce the number of column switches still allowed
+        # there has been a column switch
+        if current_location[1] is not new_location[1]:
+            piece_to_move.switches_left -= 1
 
-    def choose_next_move(self, player):
-        # Select a next move for a player based on their strategy and the output
-        # of self.get_possible_moves
-        moves = self.get_possible_moves(self, player)
-        self.make_move(np.random.choice(moves))
-        return
+        # Remove piece from current location
+        self.board[current_location] = False
+
+        # Place piece at new location
+        self.board[new_location] = piece_to_move
+
+    def copy(self):  # Create a copy of the current board
+        c = Board()
+        c.board = self.board.copy()
+        return c
 
     def detect_check(self, _board, player):
         """
