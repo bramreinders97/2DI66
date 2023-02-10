@@ -84,26 +84,105 @@ class Board:
         self.make_move(np.random.choice(moves))
         return
 
-    def detect_check(self, player):
+    def detect_check(self, _board, player):
         """
         Check whether the current player is in check. Return true if they are.
 
         :param player: the current player
         :return: bool
         """
-        # what moves can the opponent do next turn
-        moves = self.get_possible_moves(self, !player)
+        # if needed, flip the board
+        if player == 1:
+            board = list(reversed(_board))#invert _board
+        else:
+            board = _board.copy()
 
         # find location for our king:
         for i in range(self.size):
             for j in range(self.size):
-                if self.board[i][j].type == "K":
-                    king_location = (i, j)
+                if board[i][j].type == "K":
+                    k_loc = (i, j)
 
-        # check for each move if it contains our king
-        for move in moves:
-            if move[1] == king_location:
-                return True
+
+        # go through enemy piece types and areas they can be in
+        ## pawn
+        locs = [[-1,-1], [1,-1]]
+        for loc in locs:
+            try:
+                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                if type(piece) == Piece:
+                    if piece.type == "P" and piece.player != player:
+                        return True
+            except IndexError:
+                pass
+            # except AttributeError:
+            #     pass
+                # ignore if we get the error that the type of the empty squares has no attribute player
+
+        ## knight
+        locs = [[-1,-2], [1,-2], [-2,-1],[2,-1]]
+        for loc in locs:
+            try:
+                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                if type(piece) == Piece:
+                    if piece.type == "N" and piece.player != player:
+                        return True
+            except IndexError:
+                pass
+            # except AttributeError:
+            #     pass
+                # ignore if we get the error that the type of the empty squares has no attribute player
+
+        ## bishop/queen:
+        loclines = [[(-i,-i) for i in range(1,6)], [(i,-i) for i in range(1,6)]]
+        for line in loclines:
+            for loc in line:
+                try:
+                    piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                    if type(piece) == Piece:
+                        if piece.type in ["Q", "B"] and piece.player != player:
+                            return True
+                        else:
+                            break
+                except IndexError:
+                    pass
+                except AttributeError:
+                    pass
+                    # ignore if we get the error that the type of the empty squares has no attribute player
+
+        ## rook/queen
+        loclines = [[(0,-i) for i in range(1,6)], [(i,0) for i in range(1,6)], [(-i,0) for i in range(1,6)]]
+        for line in loclines:
+            for loc in line:
+                try:
+                    piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                    if type(piece) == Piece:
+                        if piece.type in ["Q", "R"] and piece.player != player:
+                            return True
+                        else:
+                            break
+                except IndexError:
+                    pass
+                except AttributeError:
+                    pass
+                    # ignore if we get the error that the type of the empty squares has no attribute player
+
+        ## king
+        locs = [[-1,-1], [0,-1], [1,-1], [1,0], [-1,0]]
+        for loc in locs:
+            try:
+                piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
+                if type(piece) == Piece:
+                    if piece.type == "K" and piece.player != player:
+                        return True
+            except IndexError:
+                pass
+            # except AttributeError:
+            #     pass
+            # ignore if we get the error that the type of the empty squares has no attribute player
+
+
+        # if we didn't find anything, we return false
         return False
 
     def __str__(self):

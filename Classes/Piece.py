@@ -5,8 +5,8 @@ class Piece:
     def __init__(self, player, piece_type):
 
         # Naming convention for type: (I would choose it like this since it is short and unambiguous)
-        # White     =>  W   (type: string)
-        # Black     =>  B   (type: string)
+        # White     =>  0   (type: int)
+        # Black     =>  1   (type: int)
         self.player = player  # White or Black, or 1/2 not sure what is more useful
 
         self.switches_left = 5  # Number of allowed column switches left
