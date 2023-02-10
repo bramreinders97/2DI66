@@ -1,24 +1,27 @@
 import numpy as np
 from Classes.Piece import Piece
+from math import inf
 
 
 class Board:
-    def __init__(self, size=5):  # Default value set to 5
+    def __init__(self, size=5, q4=False):  # Default value set to 5
+        # If we're answering Q4, the pawn can move 2 spaces at the beginning
 
         # Declaration of the array with object as data type.
         self.board = np.ndarray((size, size), dtype=object)
         self.size = size
+        self.q4 = q4
 
         # Initialise all values with "False" as default.
         for i in range(size):
             for j in range(size):
                 self.board[i][j] = False
 
+        self.init_figures()
 
-
-    def place_figure_on_board(self, row, column, player, piece_type):
+    def place_figure_on_board(self, row, column, player, piece_type, limit):
         # a little function in order to place one individual figure on the board
-        self.board[row][column] = Piece(player, piece_type)
+        self.board[row][column] = Piece(player, piece_type, limit)
 
     def init_figures(self):
         # Initialises the game board according to the specification of mini chess for a 5x5 board
@@ -33,36 +36,51 @@ class Board:
 
         # Initialise Pawns
         for i in range(5):
-            self.place_figure_on_board(3, i, "B", "P")
-            self.place_figure_on_board(1, i, "W", "P")
+            self.place_figure_on_board(3, i, "B", "P", self.q4 + 1)
+            self.place_figure_on_board(1, i, "W", "P", self.q4 + 1)
 
         # Initialise Rooks
-        self.place_figure_on_board(4, 4, "B", "R")
-        self.place_figure_on_board(0, 0, "W", "R")
+        self.place_figure_on_board(4, 4, "B", "R", inf)
+        self.place_figure_on_board(0, 0, "W", "R", inf)
 
         # Initialise Knights
-        self.place_figure_on_board(4, 3, "B", "N")
-        self.place_figure_on_board(0, 1, "W", "N")
+        self.place_figure_on_board(4, 3, "B", "N", 1)
+        self.place_figure_on_board(0, 1, "W", "N", 1)
 
         # Initialise Bishops
-        self.place_figure_on_board(4, 2, "B", "B")
-        self.place_figure_on_board(0, 2, "W", "B")
+        self.place_figure_on_board(4, 2, "B", "B", inf)
+        self.place_figure_on_board(0, 2, "W", "B", inf)
 
         # Initialise Queens
-        self.place_figure_on_board(4, 1, "B", "Q")
-        self.place_figure_on_board(0, 3, "W", "Q")
+        self.place_figure_on_board(4, 1, "B", "Q", inf)
+        self.place_figure_on_board(0, 3, "W", "Q", inf)
 
         # Initialise Kings
-        self.place_figure_on_board(4, 0, "B", "K")
-        self.place_figure_on_board(0, 4, "W", "K")
+        self.place_figure_on_board(4, 0, "B", "K", 1)
+        self.place_figure_on_board(0, 4, "W", "K", 1)
 
         return True
 
     def make_move(self, current_location, new_location):
-        # Not sure if these are the smartest parameters. I was
-        # thinking if you provide for example (1,0) and (2,0)
-        # it moves the piece on 1,0 -> 2,0
-        pass
+        """
+        Move a piece from current_location to new_location
+
+        :param current_location: tuple of form (row, col)
+        :param new_location: tuple of form (row, col)
+        """
+        # Check what piece we're moving
+        piece_to_move = self.board[current_location]
+
+        # Remove piece from current location
+        self.board[current_location] = False
+
+        # Place piece at new location
+        self.board[new_location] = piece_to_move
+
+    def copy(self):  # Create a copy of the current board
+        c = Board()
+        c.board = self.board.copy()
+        return c
 
     def evaluate_board(self):
         # Evaluate whether or not the game is finished, and if so
@@ -91,31 +109,32 @@ class Board:
         :param player: the current player
         :return: bool
         """
-        # what moves can the opponent do next turn
-        moves = self.get_possible_moves(self, !player)
+        pass
+        # # what moves can the opponent do next turn
+        # # moves = self.get_possible_moves(self, !player)
 
-        # find location for our king:
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.board[i][j].type == "K":
-                    king_location = (i, j)
+        # # find location for our king:
+        # for i in range(self.size):
+        #     for j in range(self.size):
+        #         if self.board[i][j].type == "K":
+        #             king_location = (i, j)
 
-        # check for each move if it contains our king
-        for move in moves:
-            if move[1] == king_location:
-                return True
-        return False
+        # # check for each move if it contains our king
+        # # for move in moves:
+        #     if move[1] == king_location:
+        #         return True
+        # return False
 
     def __str__(self):
 
         # The colours may appear different depending on light or dark mode.
         fig_dict = {
-            "WP": "♟", "BP": "♙",
-            "WR": "♜", "BR": "♖",
-            "WN": "♞", "BN": "♘",
-            "WB": "♝", "BB": "♗",
-            "WQ": "♛", "BQ": "♕",
-            "WK": "♚", "BK": "♔"
+            "0P": "♟", "1P": "♙",
+            "0R": "♜", "1R": "♖",
+            "0N": "♞", "1N": "♘",
+            "0B": "♝", "1B": "♗",
+            "0Q": "♛", "1Q": "♕",
+            "0K": "♚", "1K": "♔"
         }
 
         # Flip the board in order to get a more natural looking image with white at the bottom.
@@ -129,8 +148,8 @@ class Board:
             for j in range(len(self.board)):
                 if self.board[i][j]:
                     ret_str += "  "
-                    ret_str += fig_dict[self.board[i]
-                                        [j].player + self.board[i][j].type]
+                    ret_str += fig_dict[str(self.board[i]
+                                        [j].player) + self.board[i][j].type]
                     ret_str += "  "
                 else:
                     ret_str += "  ⋅  "
