@@ -28,14 +28,7 @@ class NextMovesGenerator:
         else:
             return inf
 
-    def generate_possible_moves(self):
-        # combine two check_possible_moves_functions
-        pass
-
-    def check_possible_moves_knight(self):
-        pass
-
-    def check_possible_moves_others(self, start_location, direction_obj):
+    def check_possible_moves(self, start_location, direction_obj):
         """
         Check all possible moves for a specific piece in a specific direction
 
@@ -58,7 +51,13 @@ class NextMovesGenerator:
 
         while distance <= limit:
             move_loc = start_location + distance*direction
-            piece_at_new_loc = self.board.board[move_loc[0], move_loc[1]]
+            try:
+                piece_at_new_loc = self.board.board[move_loc[0], move_loc[1]]
+            except IndexError:
+                # the horizontal_or_vertical_limit function is written without
+                # the movements of knights in mind
+                # This try-except saves knights trying to get outside of the board
+                break
 
             if piece_at_new_loc:
                 if piece_at_new_loc.player == self.player:

@@ -5,13 +5,12 @@ from Classes.NextMovesGenerator import NextMovesGenerator
 
 board = Board(5, q4=True)
 
-board.make_move((0, 3), (3, 4))
-board.make_move((1, 4), (2, 0))
+board.make_move((4, 3), (2, 0))
 
 print(board)
 
 # Check possible moves
-loc_piece = [0, 4]
+loc_piece = [0, 1]
 piece = board.board[loc_piece[0], loc_piece[1]]
 
 # pawn at 1,0
@@ -19,5 +18,5 @@ next_moves_gen = NextMovesGenerator(board, piece.player)
 directions = piece.directions()
 
 for direction in directions:
-    moves = next_moves_gen.check_possible_moves_others(loc_piece, direction)
+    moves = next_moves_gen.check_possible_moves(loc_piece, direction)
     print(direction.direction, next_moves_gen.possible_moves)
