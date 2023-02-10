@@ -1,24 +1,27 @@
 import numpy as np
 from Classes.Piece import Piece
+from math import inf
 
 
 class Board:
-    def __init__(self, size=5):  # Default value set to 5
+    def __init__(self, size=5, q4=False):  # Default value set to 5
+        # If we're answering Q4, the pawn can move 2 spaces at the beginning
 
         # Declaration of the array with object as data type.
         self.board = np.ndarray((size, size), dtype=object)
         self.size = size
+        self.q4 = q4
 
         # Initialise all values with "False" as default.
         for i in range(size):
             for j in range(size):
                 self.board[i][j] = False
 
+        self.init_figures()
 
-
-    def place_figure_on_board(self, row, column, player, piece_type):
+    def place_figure_on_board(self, row, column, player, piece_type, limit):
         # a little function in order to place one individual figure on the board
-        self.board[row][column] = Piece(player, piece_type)
+        self.board[row][column] = Piece(player, piece_type, limit)
 
     def init_figures(self):
         # Initialises the game board according to the specification of mini chess for a 5x5 board
@@ -33,28 +36,28 @@ class Board:
 
         # Initialise Pawns
         for i in range(5):
-            self.place_figure_on_board(3, i, "B", "P")
-            self.place_figure_on_board(1, i, "W", "P")
+            self.place_figure_on_board(3, i, 1, "P", self.q4 + 1)
+            self.place_figure_on_board(1, i, 0, "P", self.q4 + 1)
 
         # Initialise Rooks
-        self.place_figure_on_board(4, 4, "B", "R")
-        self.place_figure_on_board(0, 0, "W", "R")
+        self.place_figure_on_board(4, 4, 1, "R", inf)
+        self.place_figure_on_board(0, 0, 0, "R", inf)
 
         # Initialise Knights
-        self.place_figure_on_board(4, 3, "B", "N")
-        self.place_figure_on_board(0, 1, "W", "N")
+        self.place_figure_on_board(4, 3, 1, "N", 1)
+        self.place_figure_on_board(0, 1, 0, "N", 1)
 
         # Initialise Bishops
-        self.place_figure_on_board(4, 2, "B", "B")
-        self.place_figure_on_board(0, 2, "W", "B")
+        self.place_figure_on_board(4, 2, 1, "B", inf)
+        self.place_figure_on_board(0, 2, 0, "B", inf)
 
         # Initialise Queens
-        self.place_figure_on_board(4, 1, "B", "Q")
-        self.place_figure_on_board(0, 3, "W", "Q")
+        self.place_figure_on_board(4, 1, 1, "Q", inf)
+        self.place_figure_on_board(0, 3, 0, "Q", inf)
 
         # Initialise Kings
-        self.place_figure_on_board(4, 0, "B", "K")
-        self.place_figure_on_board(0, 4, "W", "K")
+        self.place_figure_on_board(4, 0, 1, "K", 1)
+        self.place_figure_on_board(0, 4, 0, "K", 1)
 
         return True
 
@@ -86,14 +89,16 @@ class Board:
 
     def detect_check(self, _board, player):
         """
-        Check whether the current player is in check. Return true if they are.
+        Move a piece from current_location to new_location.
+        Also update the numbers of column switches allowed for 
+        the moved piece if necessary
 
-        :param player: the current player
-        :return: bool
+        :param current_location: tuple of form (row, col)
+        :param new_location: tuple of form (row, col)
         """
         # if needed, flip the board
         if player == 1:
-            board = list(reversed(_board))#invert _board
+            board = list(reversed(_board))  # invert _board
         else:
             board = _board.copy()
 
@@ -103,10 +108,9 @@ class Board:
                 if board[i][j].type == "K":
                     k_loc = (i, j)
 
-
         # go through enemy piece types and areas they can be in
-        ## pawn
-        locs = [[-1,-1], [1,-1]]
+        # pawn
+        locs = [[-1, -1], [1, -1]]
         for loc in locs:
             try:
                 piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
@@ -119,8 +123,8 @@ class Board:
             #     pass
                 # ignore if we get the error that the type of the empty squares has no attribute player
 
-        ## knight
-        locs = [[-1,-2], [1,-2], [-2,-1],[2,-1]]
+        # knight
+        locs = [[-1, -2], [1, -2], [-2, -1], [2, -1]]
         for loc in locs:
             try:
                 piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
@@ -133,8 +137,9 @@ class Board:
             #     pass
                 # ignore if we get the error that the type of the empty squares has no attribute player
 
-        ## bishop/queen:
-        loclines = [[(-i,-i) for i in range(1,6)], [(i,-i) for i in range(1,6)]]
+        # bishop/queen:
+        loclines = [[(-i, -i) for i in range(1, 6)], [(i, -i)
+                                                      for i in range(1, 6)]]
         for line in loclines:
             for loc in line:
                 try:
@@ -150,8 +155,9 @@ class Board:
                     pass
                     # ignore if we get the error that the type of the empty squares has no attribute player
 
-        ## rook/queen
-        loclines = [[(0,-i) for i in range(1,6)], [(i,0) for i in range(1,6)], [(-i,0) for i in range(1,6)]]
+        # rook/queen
+        loclines = [[(0, -i) for i in range(1, 6)], [(i, 0)
+                                                     for i in range(1, 6)], [(-i, 0) for i in range(1, 6)]]
         for line in loclines:
             for loc in line:
                 try:
@@ -167,8 +173,8 @@ class Board:
                     pass
                     # ignore if we get the error that the type of the empty squares has no attribute player
 
-        ## king
-        locs = [[-1,-1], [0,-1], [1,-1], [1,0], [-1,0]]
+        # king
+        locs = [[-1, -1], [0, -1], [1, -1], [1, 0], [-1, 0]]
         for loc in locs:
             try:
                 piece = board[k_loc[0] + loc[0]][k_loc[1] + loc[1]]
@@ -181,7 +187,6 @@ class Board:
             #     pass
             # ignore if we get the error that the type of the empty squares has no attribute player
 
-
         # if we didn't find anything, we return false
         return False
 
@@ -189,12 +194,12 @@ class Board:
 
         # The colours may appear different depending on light or dark mode.
         fig_dict = {
-            "WP": "♟", "BP": "♙",
-            "WR": "♜", "BR": "♖",
-            "WN": "♞", "BN": "♘",
-            "WB": "♝", "BB": "♗",
-            "WQ": "♛", "BQ": "♕",
-            "WK": "♚", "BK": "♔"
+            "0P": "♟", "1P": "♙",
+            "0R": "♜", "1R": "♖",
+            "0N": "♞", "1N": "♘",
+            "0B": "♝", "1B": "♗",
+            "0Q": "♛", "1Q": "♕",
+            "0K": "♚", "1K": "♔"
         }
 
         # Flip the board in order to get a more natural looking image with white at the bottom.
@@ -208,8 +213,8 @@ class Board:
             for j in range(len(self.board)):
                 if self.board[i][j]:
                     ret_str += "  "
-                    ret_str += fig_dict[self.board[i]
-                                        [j].player + self.board[i][j].type]
+                    ret_str += fig_dict[str(self.board[i]
+                                        [j].player) + self.board[i][j].type]
                     ret_str += "  "
                 else:
                     ret_str += "  ⋅  "
