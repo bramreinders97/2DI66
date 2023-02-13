@@ -14,4 +14,8 @@ class playSingleGame:
         # - Boolean specifying whether white promoted a pawn to a queen (not completely sure
         #   right now whether we need a separate var for both players)
         # moves until end of game
+
+        white_queen = False
+        black_queen = False
+
         pass

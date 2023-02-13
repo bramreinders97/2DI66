@@ -84,6 +84,11 @@ class Board:
         # Place piece at new location
         self.board[new_location] = piece_to_move
 
+        #check for pawn promotion
+        if piece_to_move.type == "P":
+            if new_location[1] == 0 or new_location[1] == 4:
+                self.place_figure_on_board(new_location[0], new_location[1], piece_to_move.player, "Q", inf)
+
     def copy(self):  # Create a copy of the current board
         c = Board()
         c.board = self.board.copy()
