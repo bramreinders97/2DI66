@@ -148,7 +148,7 @@ class NextMovesGenerator:
         for i in range(len(_board)):
             for j in range(len(_board)):
                 try:
-                    if board[i][j].type == "K":
+                    if board[i][j].type == "K" and board[i][j].player == player:
                         k_loc = (i, j)
                 except AttributeError:
                     continue
