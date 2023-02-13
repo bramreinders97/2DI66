@@ -1,11 +1,13 @@
+from Classes.Board import Board
+from Classes.NextMovesGenerator import NextMovesGenerator
+
+
 class playSingleGame:
     # This class simulates a single game
 
-    def __init__(self, board, strategyPlayer1, strategyPlayer2):
-        self.board = board
-        self.strategyPlayer1 = strategyPlayer1
-        self.strategyPlayer2 = strategyPlayer2
+    def __init__(self):
         self.moves_made = 0
+        self.board = Board()
 
     def simulate_game(self):
         # Simulate game and return:
@@ -18,4 +20,29 @@ class playSingleGame:
         white_queen = False
         black_queen = False
 
-        pass
+        while True:
+            next_moves_gen = NextMovesGenerator(
+                self.board, self.moves_made % 2)
+
+            next_move = next_moves_gen.choose_next_move()
+
+            if next_move:
+                pawn_promoted = self.board.make_move(
+                    next_move[0], next_move[1])
+                if pawn_promoted:
+                    if self.moves_made % 2:
+                        black_queen = True
+                    else:
+                        white_queen = True
+
+                self.moves_made += 1
+
+            else:
+
+                # check other player
+                if next_moves_gen.detect_check(self.board.board, (self.moves_made % 2)):
+                    winner = not (self.moves_made % 2)
+                else:
+                    winner = -1
+
+                return winner, white_queen, black_queen, self.moves_made

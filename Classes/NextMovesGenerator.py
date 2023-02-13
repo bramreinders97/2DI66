@@ -169,7 +169,7 @@ class NextMovesGenerator:
                     # print(piece.player, player, loc, piece, [
                     #       k_loc[0] + loc[0], k_loc[1] + loc[1]])
                     if piece.type == "P" and piece.player != player:
-                        print("P")
+                        # print("P")
                         return True
             except IndexError:
                 pass
@@ -189,7 +189,7 @@ class NextMovesGenerator:
                 piece = board[x][y]
                 if type(piece) == Piece:
                     if piece.type == "N" and piece.player != player:
-                        print("N")
+                        # print("N")
                         return True
             except IndexError:
                 pass
@@ -211,7 +211,7 @@ class NextMovesGenerator:
                     piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "B"] and piece.player != player:
-                            print("QB")
+                            # print("QB")
                             return True
                         else:
                             break
@@ -235,7 +235,7 @@ class NextMovesGenerator:
                     piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "R"] and piece.player != player:
-                            print("QR")
+                            # print("QR")
                             return True
                         else:
                             break
@@ -257,7 +257,7 @@ class NextMovesGenerator:
                 piece = board[x][y]
                 if type(piece) == Piece:
                     if piece.type == "K" and piece.player != player:
-                        print("K")
+                        # print("K")
                         return True
             except IndexError:
                 pass
