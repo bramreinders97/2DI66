@@ -9,7 +9,7 @@ print(board)
 
 ################ How to use my (Bram) part ################
 
-n_games = 1000
+n_games = 10000
 
 black_won = 0
 white_won = 0

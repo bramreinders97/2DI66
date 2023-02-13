@@ -26,6 +26,9 @@ class playSingleGame:
 
             next_move = next_moves_gen.choose_next_move()
 
+            # print(next_move)
+            # print('from start while ', self.board)
+
             if next_move:
                 pawn_promoted = self.board.make_move(
                     next_move[0], next_move[1])
@@ -35,14 +38,21 @@ class playSingleGame:
                     else:
                         white_queen = True
 
+                # print(
+                #     f'Result check_detect black: {next_moves_gen.detect_check(self.board.board, 1)}')
+                # print(
+                #     f'Result check_detect white: {next_moves_gen.detect_check(self.board.board, 0)}')
                 self.moves_made += 1
 
             else:
-
+                # print('from else ', self.board)
                 # check other player
                 if next_moves_gen.detect_check(self.board.board, (self.moves_made % 2)):
                     winner = not (self.moves_made % 2)
                 else:
                     winner = -1
+
+                # print(self.board)
+                # print(winner, white_queen, black_queen, self.moves_made)
 
                 return winner, white_queen, black_queen, self.moves_made

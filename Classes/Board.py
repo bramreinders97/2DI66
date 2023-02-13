@@ -36,7 +36,7 @@ class Board:
 
         # Initialise Pawns
         for i in range(5):
-            self.place_figure_on_board(3, i, 1, "P", self.q4 + 1)
+            self.place_figure_on_board(3, i, 1, "P", 1)
             self.place_figure_on_board(1, i, 0, "P", self.q4 + 1)
 
         # Initialise Rooks
@@ -111,13 +111,13 @@ class Board:
         }
 
         # Flip the board in order to get a more natural looking image with white at the bottom.
-        self.board = np.flip(self.board, 0)
+        # self.board = np.flip(self.board, 0)
 
-        ret_str = "            black\n"
+        ret_str = "            white\n"
         ret_str += " +-------------------------+\n"
 
         for i in range(len(self.board)):
-            ret_str += str(4-i) + "|"
+            ret_str += str(i) + "|"
             for j in range(len(self.board)):
                 if self.board[i][j]:
                     ret_str += "  "
@@ -129,9 +129,9 @@ class Board:
             ret_str += "|\n"
 
         ret_str += " +-------------------------+\n"
-        ret_str += "            white"
+        ret_str += "            black"
 
         # undo the flipping
-        self.board = np.flip(self.board, 0)
+        # self.board = np.flip(self.board, 0)
 
         return ret_str
