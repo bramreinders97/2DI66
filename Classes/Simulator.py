@@ -25,6 +25,13 @@ class Simulator:
 
     def question_3(self, pawn_advancing=False):
 
+        """
+        The Code to answer question 3.
+
+        :param pawn_advancing: bool Controls whether white can advance two
+                                    squares along the same column on its first move.
+        """
+
         # In order to get a confidence interval, we need to simulate some games.
         print("Question 3: average number of games.")
 
@@ -33,6 +40,11 @@ class Simulator:
 
         for i in range(n_games):
             game = playSingleGame()
+
+            # Turn on pawn advancing for white if wanted.
+            if pawn_advancing:
+                game.board.q4 = True
+
             tmp = game.simulate_game()
             n_moves_list.append(tmp[3])
             if i % 100 == 0:
@@ -69,6 +81,11 @@ class Simulator:
         i = 0
         while i < n_games:
             game = playSingleGame()
+
+            # Turn on pawn advancing for white if wanted.
+            if pawn_advancing:
+                game.board.q4 = True
+
             tmp = game.simulate_game()
             if not tmp[0]:
                 n_moves_list.append(tmp[3])
