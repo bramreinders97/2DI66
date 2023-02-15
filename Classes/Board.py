@@ -20,14 +20,29 @@ class Board:
         self.init_figures()
 
     def place_figure_on_board(self, row, column, player, piece_type, limit):
-        # a little function in order to place one individual figure on the board
+
+        """
+                Places one piece on the board.
+
+                :param row: int             The row where the piece should be placed.
+
+                :param column: int          The column where the piece should be placed.
+
+                :param player: bool         The owner of the piece (black or white)
+
+                :param piece_type: string   The type of the piece (rook, king,....)
+
+                :param piece_type: limit    Set the limit (described in the class Piece)
+        """
+
         self.board[row][column] = Piece(player, piece_type, limit)
 
     def init_figures(self):
-        # Initialises the game board according to the specification of mini chess for a 5x5 board
-        # Convention:
-        # White     =>      rows 0 and 1
-        # Black     =>      rows 3 and 4
+
+        """
+                Initialises the game board according to the specification
+                of mini chess for a 5x5 board
+        """
 
         # Check if the board is indeed 5x5
         if len(self.board) != 5 or len(self.board[0]) != 5:
@@ -99,6 +114,9 @@ class Board:
         return c
 
     def __str__(self):
+        """
+                Function that returns a string which is a plotting of the board.
+        """
 
         # The colours may appear different depending on light or dark mode.
         fig_dict = {
@@ -110,13 +128,14 @@ class Board:
             "0K": "♚", "1K": "♔"
         }
 
-        # Flip the board in order to get a more natural looking image with white at the bottom.
+        # Possibility to flip the board:
         # self.board = np.flip(self.board, 0)
 
         ret_str = "            white\n"
         ret_str += " +-------------------------+\n"
 
         for i in range(len(self.board)):
+            # change this to "str(4-i)" if the board is flipped"
             ret_str += str(i) + "|"
             for j in range(len(self.board)):
                 if self.board[i][j]:
@@ -131,7 +150,7 @@ class Board:
         ret_str += " +-------------------------+\n"
         ret_str += "            black"
 
-        # undo the flipping
+        # undo the flipping if done previously.
         # self.board = np.flip(self.board, 0)
 
         return ret_str
