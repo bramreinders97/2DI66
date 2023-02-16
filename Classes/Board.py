@@ -20,7 +20,6 @@ class Board:
         self.init_figures()
 
     def place_figure_on_board(self, row, column, player, piece_type, limit):
-
         """
                 Places one piece on the board.
 
@@ -38,7 +37,6 @@ class Board:
         self.board[row][column] = Piece(player, piece_type, limit)
 
     def init_figures(self):
-
         """
                 Initialises the game board according to the specification
                 of mini chess for a 5x5 board

@@ -5,9 +5,9 @@ from Classes.NextMovesGenerator import NextMovesGenerator
 class playSingleGame:
     # This class simulates a single game
 
-    def __init__(self):
+    def __init__(self, q4=False):
         self.moves_made = 0
-        self.board = Board()
+        self.board = Board(q4=q4)
 
     def simulate_game(self):
         # Simulate game and return:
