@@ -135,7 +135,7 @@ class NextMovesGenerator:
         :return: bool
         """
         # if needed, flip the board
-        if player == 1:
+        if player == 0:
             board = list(reversed(_board))  # invert _board
         else:
             board = _board.copy()
@@ -150,13 +150,14 @@ class NextMovesGenerator:
                 try:
                     if board[i][j].type == "K" and board[i][j].player == player:
                         k_loc = (i, j)
+                        # print(f'k_loc: {i}, {j}')
                 except AttributeError:
                     continue
 
         # print(k_loc)
         # go through enemy piece types and areas they can be in
         # pawn
-        locs = [[-1, -1], [1, -1]]
+        locs = [[-1, 1], [-1, -1]]
         for loc in locs:
             try:
                 x = k_loc[0] + loc[0]
@@ -179,7 +180,7 @@ class NextMovesGenerator:
                 # ignore if we get the error that the type of the empty squares has no attribute player
 
         # knight
-        locs = [[-1, -2], [1, -2], [-2, -1], [2, -1]]
+        locs = [[-1, -2], [-1, 2], [-2, -1], [-2, 1]]
         for loc in locs:
             try:
                 x = k_loc[0] + loc[0]
@@ -201,7 +202,7 @@ class NextMovesGenerator:
                 # ignore if we get the error that the type of the empty squares has no attribute player
 
         # bishop/queen:
-        loclines = [[(-i, -i) for i in range(1, 6)], [(i, -i)
+        loclines = [[(-i, -i) for i in range(1, 6)], [(-i, i)
                                                       for i in range(1, 6)]]
         for line in loclines:
             for loc in line:
@@ -227,8 +228,8 @@ class NextMovesGenerator:
                     # ignore if we get the error that the type of the empty squares has no attribute player
 
         # rook/queen
-        loclines = [[(0, -i) for i in range(1, 6)], [(i, 0)
-                                                     for i in range(1, 6)], [(-i, 0) for i in range(1, 6)]]
+        loclines = [[(0, -i) for i in range(1, 6)], [(-i, 0)
+                                                     for i in range(1, 6)], [(0, i) for i in range(1, 6)]]
         for line in loclines:
             for loc in line:
                 try:
@@ -253,7 +254,7 @@ class NextMovesGenerator:
                     # ignore if we get the error that the type of the empty squares has no attribute player
 
         # king
-        locs = [[-1, -1], [0, -1], [1, -1], [1, 0], [-1, 0]]
+        locs = [[-1, -1], [0, -1], [-1, 1], [-1, 0], [0, 1]]
         for loc in locs:
             try:
                 x = k_loc[0] + loc[0]
