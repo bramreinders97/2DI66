@@ -169,8 +169,9 @@ class NextMovesGenerator:
                     # print(piece.player, player, loc, piece, [
                     #       k_loc[0] + loc[0], k_loc[1] + loc[1]])
                     if piece.type == "P" and piece.player != player:
+                        if (loc[1] != 0 and piece.switches_left > 0) or loc[1] == 0:
+                            return True
                         # print("P")
-                        return True
             except IndexError:
                 pass
             # except AttributeError:
@@ -189,8 +190,10 @@ class NextMovesGenerator:
                 piece = board[x][y]
                 if type(piece) == Piece:
                     if piece.type == "N" and piece.player != player:
+                        if (loc[1] != 0 and piece.switches_left > 0) or loc[1] == 0:
+                            return True
                         # print("N")
-                        return True
+
             except IndexError:
                 pass
             # except AttributeError:
@@ -211,8 +214,10 @@ class NextMovesGenerator:
                     piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "B"] and piece.player != player:
+                            if (loc[1] != 0 and piece.switches_left > 0) or loc[1] == 0:
+                                return True
                             # print("QB")
-                            return True
+
                         else:
                             break
                 except IndexError:
@@ -235,8 +240,10 @@ class NextMovesGenerator:
                     piece = board[x][y]
                     if type(piece) == Piece:
                         if piece.type in ["Q", "R"] and piece.player != player:
+                            if (loc[1] != 0 and piece.switches_left > 0) or loc[1] == 0:
+                                return True
                             # print("QR")
-                            return True
+
                         else:
                             break
                 except IndexError:
@@ -258,7 +265,8 @@ class NextMovesGenerator:
                 if type(piece) == Piece:
                     if piece.type == "K" and piece.player != player:
                         # print("K")
-                        return True
+                        if (loc[1] != 0 and piece.switches_left > 0) or loc[1] == 0:
+                            return True
             except IndexError:
                 pass
             # except AttributeError:
