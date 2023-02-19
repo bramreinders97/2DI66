@@ -148,7 +148,7 @@ class Simulator:
         # used for calculating the confidence interval.
         # Since the resulting number is quite large, we will not simulate this many games.
 
-        n_games_needed = 1 / (((0.01 / 1.96) ** 2) / np.var(n_moves_list))
+        n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)
         print("In order to achieve a half-width of 0.01 approximately " + str(
             np.round(n_games_needed, 1)) + " games are needed")
 
@@ -185,7 +185,7 @@ class Simulator:
         # Again, we are using the same approach as above to calculate  the number of needed games
         # to achieve a half-width of 0.01.
 
-        n_games_needed = 1 / (((0.01 / 1.96) ** 2) / np.var(n_moves_list))
+        n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)
         print("In order to achieve a halfWidth of 0.01 approximately " + str(
             np.round(n_games_needed, 1)) + " games are needed")
 
