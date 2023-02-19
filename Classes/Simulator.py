@@ -111,7 +111,7 @@ class Simulator:
         # maybe also make visualisation?
         pass
 
-    def question_3(self, pawn_advancing=False):
+    def question_3(self):
         """
         The Code to answer question 3.
 
@@ -127,10 +127,6 @@ class Simulator:
 
         for i in range(n_games):
             game = playSingleGame()
-
-            # Turn on pawn advancing for white if wanted.
-            if pawn_advancing:
-                game.board.q4 = True
 
             tmp = game.simulate_game()
             n_moves_list.append(tmp[3])
@@ -169,10 +165,6 @@ class Simulator:
         i = 0
         while i < n_games:
             game = playSingleGame()
-
-            # Turn on pawn advancing for white if wanted.
-            if pawn_advancing:
-                game.board.q4 = True
 
             tmp = game.simulate_game()
             if not tmp[0]:
