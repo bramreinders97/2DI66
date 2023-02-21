@@ -106,10 +106,43 @@ class Simulator:
 
         print()
 
-    def question_2(self, n):
-        # do calculations that answer Q2
-        # maybe also make visualisation?
-        pass
+    def get_promotion_single_game(self):
+        """
+        Play a single game and return wheter anyone got a promotion
+        :return: bool
+        """
+        game = playSingleGame()
+        output = game.simulate_game()
+        promotion = output[1] or output[2]
+        return promotion
+
+
+    def question_2(self, nRuns):
+        """
+        Code to answer question 2
+        :param n: number of runs to be ran for the test
+        :return:
+        """
+        print()
+        print(f"Doing {nRuns} runs to answer Q2!")
+        print()
+
+        # Initialize results array
+        sim_results = np.zeros(nRuns)
+
+        # Get results from games
+        sim_results = self.sim_games_in_parallel(nRuns)
+
+        #get the promotion from each game
+        num_cores = multiprocessing.cpu_count()
+
+        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game())()
+                                                 for _ in range(nRuns))
+
+        promotions = np.array(sim_results)
+        prob_promo, ci_promo = self.calc_probability_and_ci(promotions, True)
+
+        print(f"Probability of promotion: {prob_promo}, CI: {ci_promo}")
 
     def question_3(self):
         """
