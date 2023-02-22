@@ -103,12 +103,45 @@ class Simulator:
 
         print()
 
-    def question_2(self, n):
-        # do calculations that answer Q2
-        # maybe also make visualisation?
-        pass
+    def get_promotion_single_game(self):
+        """
+        Play a single game and return wheter anyone got a promotion
+        :return: bool
+        """
+        game = playSingleGame()
+        output = game.simulate_game()
+        promotion = output[1] or output[2]
+        return promotion
 
-    def question_3(self, pawn_advancing=False):
+
+    def question_2(self, nRuns):
+        """
+        Code to answer question 2
+        :param n: number of runs to be ran for the test
+        :return:
+        """
+        print()
+        print(f"Doing {nRuns} runs to answer Q2!")
+        print()
+
+        # Initialize results array
+        sim_results = np.zeros(nRuns)
+
+        # Get results from games
+        sim_results = self.sim_games_in_parallel(nRuns)
+
+        #get the promotion from each game
+        num_cores = multiprocessing.cpu_count()
+
+        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game())()
+                                                 for _ in range(nRuns))
+
+        promotions = np.array(sim_results)
+        prob_promo, ci_promo = self.calc_probability_and_ci(promotions, True)
+
+        print(f"Probability of promotion: {prob_promo}, CI: {ci_promo}")
+
+    def question_3(self):
         """
         The Code to answer question 3.
 
@@ -124,10 +157,6 @@ class Simulator:
 
         for i in range(n_games):
             game = playSingleGame()
-
-            # Turn on pawn advancing for white if wanted.
-            if pawn_advancing:
-                game.board.q4 = True
 
             tmp = game.simulate_game()
             n_moves_list.append(tmp[3])
@@ -149,7 +178,7 @@ class Simulator:
         # used for calculating the confidence interval.
         # Since the resulting number is quite large, we will not simulate this many games.
 
-        n_games_needed = 1 / (((0.01 / 1.96) ** 2) / np.var(n_moves_list))
+        n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)
         print("In order to achieve a half-width of 0.01 approximately " + str(
             np.round(n_games_needed, 1)) + " games are needed")
 
@@ -166,10 +195,6 @@ class Simulator:
         i = 0
         while i < n_games:
             game = playSingleGame()
-
-            # Turn on pawn advancing for white if wanted.
-            if pawn_advancing:
-                game.board.q4 = True
 
             tmp = game.simulate_game()
             if not tmp[0]:
@@ -190,7 +215,7 @@ class Simulator:
         # Again, we are using the same approach as above to calculate  the number of needed games
         # to achieve a half-width of 0.01.
 
-        n_games_needed = 1 / (((0.01 / 1.96) ** 2) / np.var(n_moves_list))
+        n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)
         print("In order to achieve a halfWidth of 0.01 approximately " + str(
             np.round(n_games_needed, 1)) + " games are needed")
 
