@@ -81,9 +81,6 @@ class Simulator:
         print(f"Doing {nRuns} runs to answer Q{4 if self.q4 else 1}!")
         print()
 
-        # Initialize results array
-        sim_results = np.zeros(nRuns)
-
         # Get results from games
         sim_results = self.sim_games_in_parallel(nRuns)
 
