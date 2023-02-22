@@ -91,6 +91,11 @@ class Board:
         if current_location[1] is not new_location[1]:
             piece_to_move.switches_left -= 1
 
+        # If pawn and limit == 2 -> this was it's first move in Q4
+        # so reset limit to 1
+        if piece_to_move.type == "P":
+            piece_to_move.limit = 1
+
         # Remove piece from current location
         self.board[current_location] = False
 
