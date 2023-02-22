@@ -136,7 +136,7 @@ class Simulator:
         #get the promotion from each game
         num_cores = multiprocessing.cpu_count()
 
-        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game())()
+        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game)()
                                                  for _ in range(nRuns))
 
         promotions = np.array(sim_results)
