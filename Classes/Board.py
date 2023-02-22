@@ -104,7 +104,7 @@ class Board:
 
         # check for pawn promotion
         if piece_to_move.type == "P":
-            if new_location[1] == 0 or new_location[1] == 4:
+            if new_location[0] == 0 or new_location[0] == 4:
                 self.place_figure_on_board(
                     new_location[0], new_location[1], piece_to_move.player, "Q", inf)
                 return True

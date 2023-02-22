@@ -33,10 +33,12 @@ class playSingleGame:
                 pawn_promoted = self.board.make_move(
                     next_move[0], next_move[1])
                 if pawn_promoted:
+
                     if self.moves_made % 2:
                         black_queen = True
                     else:
                         white_queen = True
+                    #print(self.board, white_queen, black_queen, self.moves_made)
 
                 # print(
                 #     f'Result check_detect black: {next_moves_gen.detect_check(self.board.board, 1)}')
