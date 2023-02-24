@@ -4,8 +4,9 @@ from numpy import array
 
 
 class Piece:
-    # This class is to be extended for all possible type of pieces. Each of these extensions
-    # will have their own possible_next_locations function
+    # This class is to be extended for all possible type of pieces.
+    # Each of these extensions will have their own possible_next_locations
+    # function
 
     def __init__(self, player, piece_type, limit):
 
@@ -34,13 +35,15 @@ class Piece:
         Function that returns a list of all the possible directions a piece
         can move in.
         """
-        # white pieces should go in inverted directions compared to black pieces
+        # white pieces should go in inverted directions compared to black
+        # pieces
         directions_factor = 1 if not self.player else -1
 
         # Return the possible directions this piece can move in
         if self.type == "P":
             directions = [
-                Direction(directions_factor*array([1, 0]), self.limit, can_hit=False)]
+                Direction(directions_factor*array([1, 0]),
+                          self.limit, can_hit=False)]
 
             # col switches are only possible if we have switches left
             if self.switches_left > 0:
@@ -90,8 +93,10 @@ class Piece:
                 return []
 
         elif self.type == "Q":
-            directions = [Direction(directions_factor*array([1, 0]), self.limit),
-                          Direction(directions_factor*array([1, 0]), self.limit)]
+            directions = [Direction(directions_factor*array([1, 0]),
+                                    self.limit),
+                          Direction(directions_factor*array([1, 0]),
+                                    self.limit)]
 
             # col switches are only possible if we have switches left
             if self.switches_left > 0:

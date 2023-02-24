@@ -12,6 +12,24 @@ t2 = time.time()
 
 print(f"Took {t2 - t1} seconds")
 
+################ Test Q2 ################
+
+t1 = time.time()
+sim = Simulator()
+sim.question_2(n_simulations)
+t2 = time.time()
+
+print(f"Took {t2 - t1} seconds")
+
+################ Test Q3 ################
+
+t1 = time.time()
+sim = Simulator()
+sim.question_3()
+t2 = time.time()
+
+print(f"Took {t2 - t1} seconds")
+
 ################ Test Q4 ################
 
 t1 = time.time()

@@ -36,7 +36,8 @@ class Simulator:
         Checks if two CI's overlap. Returns True is this is 
         the case and False if not
 
-        :param cis_to_check: list List of CIs the form [(low,high),(low,high),..]
+        :param cis_to_check: list List of CIs the form 
+                             [(low,high),(low,high),..]
         """
         for cis_to_check in combinations(cis_to_check, 2):
             ci1 = cis_to_check[0]
@@ -66,8 +67,9 @@ class Simulator:
         """
         num_cores = multiprocessing.cpu_count()
 
-        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_winner_single_game)()
-                                                 for _ in range(n_games))
+        sim_results = \
+            Parallel(n_jobs=num_cores)(delayed(self.get_winner_single_game)()
+                                       for _ in range(n_games))
 
         return np.array(sim_results)
 
@@ -113,7 +115,6 @@ class Simulator:
         promotion = output[1] or output[2]
         return promotion
 
-
     def question_2(self, nRuns):
         """
         Code to answer question 2
@@ -130,11 +131,12 @@ class Simulator:
         # Get results from games
         sim_results = self.sim_games_in_parallel(nRuns)
 
-        #get the promotion from each game
+        # get the promotion from each game
         num_cores = multiprocessing.cpu_count()
 
-        sim_results = Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game)()
-                                                 for _ in range(nRuns))
+        sim_results = \
+            Parallel(n_jobs=num_cores)(delayed(self.get_promotion_single_game)()
+                                       for _ in range(nRuns))
 
         promotions = np.array(sim_results)
         prob_promo, ci_promo = self.calc_probability_and_ci(promotions, True)
@@ -146,7 +148,8 @@ class Simulator:
         The Code to answer question 3.
 
         :param pawn_advancing: bool Controls whether white can advance two
-                                    squares along the same column on its first move.
+                                    squares along the same column on its 
+                                    first move.
         """
 
         # In order to get a confidence interval, we need to simulate some games.
@@ -167,16 +170,19 @@ class Simulator:
         print()
 
         half_width = 1.96 * np.sqrt(np.var(n_moves_list) / n_games)
-        print("The average number of steps for " + str(n_games) + " played games is "
+        print("The average number of steps for " + str(n_games)
+              + " played games is "
               + str(np.round(np.average(n_moves_list), 1)) + " games")
         print("Half width for " + str(n_games) +
               " games: " + str(np.round(half_width, 6)))
 
         # Since the want a half width of 0.01 we need to simulate more games.
-        # To compute how much more we will compute n using the variance obtained above.
-        # To compute the number of games needed we just transform the formular
+        # To compute how much more we will compute n using the variance
+        # obtained above.
+        # To compute the number of games needed we just transform the formula
         # used for calculating the confidence interval.
-        # Since the resulting number is quite large, we will not simulate this many games.
+        # Since the resulting number is quite large, we will not simulate this
+        # many games.
 
         n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)
         print("In order to achieve a half-width of 0.01 approximately " + str(
@@ -186,8 +192,10 @@ class Simulator:
         print("--------------------------")
         print("Question 3: average number of games if white wins.")
 
-        # To get the average number of games with given that white wins can be achieved by only some small adaptions.
-        # The trick is to simply only append to the array if white won the game.
+        # To get the average number of games with given that white wins can be
+        # achieved by only some small adaptions.
+        # The trick is to simply only append to the array if white won the
+        # game.
 
         n_games = 2000  # Actually it is the number of games where white won.
         n_moves_list = []
@@ -207,12 +215,14 @@ class Simulator:
         print()
 
         half_width = 1.96 * np.sqrt(np.var(n_moves_list) / n_games)
-        print("The average number of steps for " + str(n_games) + " played games is " + str(
+        print("The average number of steps for " + str(n_games) +
+              " played games is " + str(
             np.round(np.average(n_moves_list), 1)) + " games")
         print("Half width for " + str(n_games) +
               " games: " + str(np.round(half_width, 6)))
 
-        # Again, we are using the same approach as above to calculate  the number of needed games
+        # Again, we are using the same approach as above to calculate the
+        # number of needed games
         # to achieve a half-width of 0.01.
 
         n_games_needed = np.var(n_moves_list) / ((0.01 / 1.96) ** 2)

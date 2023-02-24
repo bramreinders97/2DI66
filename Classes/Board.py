@@ -23,15 +23,20 @@ class Board:
         """
                 Places one piece on the board.
 
-                :param row: int             The row where the piece should be placed.
+                :param row: int             The row where the piece should be 
+                                            placed.
 
-                :param column: int          The column where the piece should be placed.
+                :param column: int          The column where the piece should
+                                            be placed.
 
-                :param player: bool         The owner of the piece (black or white)
+                :param player: bool         The owner of the piece (black or 
+                                            white)
 
-                :param piece_type: string   The type of the piece (rook, king,....)
+                :param piece_type: string   The type of the piece 
+                                            (rook, king,....)
 
-                :param piece_type: limit    Set the limit (described in the class Piece)
+                :param piece_type: limit    Set the limit (described in the
+                                            class Piece)
         """
 
         self.board[row][column] = Piece(player, piece_type, limit)
@@ -106,7 +111,8 @@ class Board:
         if piece_to_move.type == "P":
             if new_location[0] == 0 or new_location[0] == 4:
                 self.place_figure_on_board(
-                    new_location[0], new_location[1], piece_to_move.player, "Q", inf)
+                    new_location[0], new_location[1], piece_to_move.player,
+                    "Q", inf)
                 return True
 
         return False
@@ -118,7 +124,8 @@ class Board:
 
     def __str__(self):
         """
-                Function that returns a string which is a plotting of the board.
+            Function that returns a string which is a plotting of 
+            the board.
         """
 
         # The colours may appear different depending on light or dark mode.
