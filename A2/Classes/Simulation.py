@@ -1,4 +1,5 @@
 from A2.Classes.Event import Event
+from A2.Classes.Queues import Queues
 
 import numpy as np
 import heapq
@@ -22,8 +23,13 @@ class Simulation:
 
         self.next_group_id = 0  # A counter to track the next group ID
 
-
     def simulate(self):
+
+        # Create Queues
+        queues = Queues()
+        queues.add_queue()
+        queues.add_queue()
+        queues.add_queue()
 
         # Push first event onto the event_list
         event = Event(0, self.t)
@@ -41,9 +47,20 @@ class Simulation:
                 self.next_group_id += 1
                 self.schedule_events(tmp_events)
 
-            print(self.t)
+            elif 1 == event.type:
+                tmp_events = event.handle_enter_queue_event(queues)
+                self.schedule_events(tmp_events)
 
-        print(len(self.event_list))
+            elif 2 == event.type:
+                tmp_events = event.handle_depature_event()
+                self.schedule_events(tmp_events)
+
+            else:
+                print("ERROR: in simulat: unknown event type")
+                break
+
+            #print("Type: " + str(event.type) + " " + str(queues.queues[0].customers_in_queue) + " " + str(queues.queues[1].customers_in_queue) + " " + str(queues.queues[2].customers_in_queue))
+
 
     def schedule_events(self, events):
 

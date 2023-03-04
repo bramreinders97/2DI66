@@ -1,3 +1,5 @@
+import math
+
 from A2.Classes.Customer import Customer
 
 class Event:
@@ -29,6 +31,29 @@ class Event:
 
         # Create one new ARRIVAL event.
         new_events.append(Event(0, self.t + time_till_next_arrival))
+
+        return new_events
+
+    def handle_enter_queue_event(self, queues):
+        new_events = []
+
+        # get shortest queue (when equal the highest index is taken)
+        shortest_queue = queues.queues[0].customers_in_queue
+        shortest_queue_id = 0
+        for i in range(1, len(queues.queues)):
+            if queues.queues[i].customers_in_queue <= shortest_queue:
+                shortest_queue_id = i
+
+        # update to queue
+        time_needed = queues.queues[shortest_queue_id].update_queue(self.t, self.customer.payment_method)
+
+        new_events.append(Event(2, self.t + time_needed, self.customer))
+
+        return new_events
+
+    def handle_depature_event(self):
+
+        new_events = []
 
         return new_events
 
