@@ -1,7 +1,5 @@
 from A2.Classes.Customer import Customer
 
-import random
-
 class Event:
 
     ARRIVAL = 0
@@ -26,19 +24,8 @@ class Event:
         # Create an ENTER_QUEUE event for all customers in the group
         for i in range(n_group_members):
 
-            # Decide for cash or card
-            tmp = random.random()
-            if tmp <= 0.4:
-                payment_method = "cash"
-            else:
-                payment_method = "card"
-
-            # Decide how long the Customer needs to get the food
-            # TODO: Distribution
-            get_food_time = 80
-
-            tmp_customer = Customer(self.t, payment_method, group_id, get_food_time)
-            new_events.append(Event(1, self.t + get_food_time, tmp_customer))
+            tmp_customer = Customer(self.t, group_id)
+            new_events.append(Event(1, self.t + tmp_customer.get_food_time, tmp_customer))
 
         # Create one new ARRIVAL event.
         new_events.append(Event(0, self.t + time_till_next_arrival))
