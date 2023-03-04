@@ -35,6 +35,7 @@ class Event:
         return new_events
 
     def handle_enter_queue_event(self, queues):
+
         new_events = []
 
         # get shortest queue (when equal the highest index is taken)
@@ -47,11 +48,13 @@ class Event:
         # update to queue
         time_needed = queues.queues[shortest_queue_id].update_queue(self.t, self.customer.payment_method)
 
+        # create new DEPATURE event
+        self.customer.queue = shortest_queue_id
         new_events.append(Event(2, self.t + time_needed, self.customer))
 
         return new_events
 
-    def handle_depature_event(self):
+    def handle_depature_event(self, queue):
 
         new_events = []
 

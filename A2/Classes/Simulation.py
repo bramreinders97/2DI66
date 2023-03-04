@@ -52,7 +52,7 @@ class Simulation:
                 self.schedule_events(tmp_events)
 
             elif 2 == event.type:
-                tmp_events = event.handle_depature_event()
+                tmp_events = event.handle_depature_event(queues.queues[event.customer.queue])
                 self.schedule_events(tmp_events)
 
             else:
@@ -60,7 +60,7 @@ class Simulation:
                 break
 
             #print("Type: " + str(event.type) + " " + str(queues.queues[0].customers_in_queue) + " " + str(queues.queues[1].customers_in_queue) + " " + str(queues.queues[2].customers_in_queue))
-
+        #print(queues.queues[0].integral/self.t)
 
     def schedule_events(self, events):
 

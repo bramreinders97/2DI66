@@ -11,7 +11,7 @@ class SimulateResults:
         self.sumQTime = 0  # for summing total queueing time
         self.sumQTime2 = 0  # for summing total queueing time variance
         self.nPeopleHistogram = np.zeros(
-            self.MAX_PEOPLE_IN_CANTEEN + 1)  # for the histogram of #people in canteen
+        self.MAX_PEOPLE_IN_CANTEEN + 1)  # for the histogram of #people in canteen
 
         # for the sojourn times of groups of people.
         self.SojournGroups = np.deque()
