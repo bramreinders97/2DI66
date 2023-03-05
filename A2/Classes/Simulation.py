@@ -69,8 +69,8 @@ class Simulation:
 
                 # update group_time_list
                 customer_time = event.customer.departure_time - event.customer.arrival_time
-                tmp = max(self.group_time_list[event.customer.group_index][0], customer_time)
-                self.group_time_list[event.customer.group_index][0] = tmp
+                max_time = max(self.group_time_list[event.customer.group_index][0], customer_time)
+                self.group_time_list[event.customer.group_index][0] = max_time
                 self.group_time_list[event.customer.group_index][1] -= 1
 
             else:
