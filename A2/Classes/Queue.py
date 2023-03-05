@@ -6,11 +6,11 @@ class Queue:
 
         self.time_till_finished = 0
         self.customers_in_queue = 0
-        self.last_update = -1
+        self.last_update = 0
 
         self.integral = 0
 
-    def update_queue(self, t, payment_method):
+    def update_queue_type_1(self, t, payment_method):
 
         # Determine the time the cashier needs to server the customer
         if "cash" == payment_method:
@@ -29,11 +29,17 @@ class Queue:
         time_passed = t - self.last_update
         self.integral += (time_passed * self.customers_in_queue)
         self.customers_in_queue += 1
-        self.time_till_finished = self.time_till_finished - time_passed + time_needed_for_customer
+        self.time_till_finished = max(self.time_till_finished - time_passed, 0) + time_needed_for_customer
         self.last_update = t
 
         # return time_till_finished to schedule the DEPARTURE event.
         return self.time_till_finished
 
+    def update_queue_type_2(self, t):
 
-
+        # Update queue parameters
+        time_passed = t - self.last_update
+        self.integral += (time_passed * self.customers_in_queue)
+        self.customers_in_queue -= 1
+        self.time_till_finished = self.time_till_finished - time_passed
+        self.last_update = t

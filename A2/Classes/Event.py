@@ -9,9 +9,9 @@ class Event:
     DEPARTURE = 2
 
     def __init__(self, event_type, t, customer=None):
-        self.type = event_type
-        self.t = t
-        self.customer = customer
+        self.type = event_type      # Type of the event
+        self.t = t                  # Time of the event
+        self.customer = customer    # Customer linked to the event
 
     def handle_arrival_event(self, group_id):
 
@@ -21,11 +21,10 @@ class Event:
         n_group_members = 3
 
         # TODO: Poisson Process
-        time_till_next_arrival = 120    # The time until the next group arrives
+        time_till_next_arrival = 15    # The time until the next group arrives
 
         # Create an ENTER_QUEUE event for all customers in the group
         for i in range(n_group_members):
-
             tmp_customer = Customer(self.t, group_id)
             new_events.append(Event(1, self.t + tmp_customer.get_food_time, tmp_customer))
 
@@ -46,7 +45,7 @@ class Event:
                 shortest_queue_id = i
 
         # update to queue
-        time_needed = queues.queues[shortest_queue_id].update_queue(self.t, self.customer.payment_method)
+        time_needed = queues.queues[shortest_queue_id].update_queue_type_1(self.t, self.customer.payment_method)
 
         # create new DEPATURE event
         self.customer.queue = shortest_queue_id
@@ -54,11 +53,9 @@ class Event:
 
         return new_events
 
-    def handle_depature_event(self, queue):
-
-        new_events = []
-
-        return new_events
+    def handle_departure_event(self, queue):
+        queue.update_queue_type_2(self.t)
+        return queue
 
     def __lt__(self, other):
         return self.t < other.t

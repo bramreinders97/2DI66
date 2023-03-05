@@ -16,12 +16,15 @@ class Simulation:
     #    self.extension_3 = extension_3
 
     def __init__(self):
-        self.T = 3600   # one hour -> 3600 s
-        self.t = 0      # starting time
+        self.T = 3600           # End time: one hour -> 3600 s
+        self.t = 0              # starting time
 
-        self.event_list = []
+        self.event_list = []    # Event list
 
         self.next_group_id = 0  # A counter to track the next group ID
+
+        self.finished_customer_list = []  # A list of all finished customers
+        self.group_time_list = []         # A list of a 2D array: (max serving time, nr. of group members in the system)
 
     def simulate(self):
 
@@ -47,20 +50,32 @@ class Simulation:
                 self.next_group_id += 1
                 self.schedule_events(tmp_events)
 
+                # -1 because there is one type 0 event which must be excluded.
+                self.group_time_list.append([-1, len(tmp_events)-1])
+
             elif 1 == event.type:
                 tmp_events = event.handle_enter_queue_event(queues)
                 self.schedule_events(tmp_events)
 
             elif 2 == event.type:
-                tmp_events = event.handle_depature_event(queues.queues[event.customer.queue])
-                self.schedule_events(tmp_events)
+
+                # update queue
+                updated_queue = event.handle_departure_event(queues.queues[event.customer.queue])
+                queues.queues[event.customer.queue] = updated_queue
+
+                # update and save customer
+                event.customer.departure_time = self.t
+                self.finished_customer_list.append(event.customer)
+
+                # update group_time_list
+                customer_time = event.customer.departure_time - event.customer.arrival_time
+                tmp = max(self.group_time_list[event.customer.group_index][0], customer_time)
+                self.group_time_list[event.customer.group_index][0] = tmp
+                self.group_time_list[event.customer.group_index][1] -= 1
 
             else:
-                print("ERROR: in simulat: unknown event type")
+                print("ERROR: in simulate: unknown event type")
                 break
-
-            #print("Type: " + str(event.type) + " " + str(queues.queues[0].customers_in_queue) + " " + str(queues.queues[1].customers_in_queue) + " " + str(queues.queues[2].customers_in_queue))
-        #print(queues.queues[0].integral/self.t)
 
     def schedule_events(self, events):
 
