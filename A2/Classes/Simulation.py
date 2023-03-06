@@ -4,7 +4,6 @@ from A2.Classes.Queues import Queues
 import numpy as np
 import heapq
 
-
 class Simulation:
     #def __init__(self, arrivalDist, pickFoodDist, serveCustCardDist, serveCustCashDist, extension_1=False, extension_2=False, extension_3=False):
     #    self.arrivalDist = arrivalDist
