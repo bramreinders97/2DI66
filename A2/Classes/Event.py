@@ -1,4 +1,4 @@
-import math
+import random
 
 from A2.Classes.Customer import Customer
 
@@ -13,19 +13,29 @@ class Event:
         self.t = t                  # Time of the event
         self.customer = customer    # Customer linked to the event
 
-    def handle_arrival_event(self, group_id):
+    def handle_arrival_event(self, group_id, mobile_store, card_only):
 
         new_events = []
 
         # TODO: Distribution
         n_group_members = 3
 
-        # TODO: Poisson Process
-        time_till_next_arrival = 15    # The time until the next group arrives
+        # Get the arrival time of the next group
+        if not mobile_store:
+            # TODO: Poisson Process
+            time_till_next_arrival = 15    # The time until the next group arrives
+        else:
+            time_till_next_arrival = 0
+            while True:
+                # TODO: Poisson Process
+                time_till_next_arrival += 15
+                tmp = random.random()
+                if tmp > mobile_store:
+                    break
 
         # Create an ENTER_QUEUE event for all customers in the group
         for i in range(n_group_members):
-            tmp_customer = Customer(self.t, group_id)
+            tmp_customer = Customer(self.t, group_id, card_only)
             new_events.append(Event(1, self.t + tmp_customer.get_food_time, tmp_customer))
 
         # Create one new ARRIVAL event.

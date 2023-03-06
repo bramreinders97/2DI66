@@ -15,9 +15,13 @@ class Simulation:
     #    self.extension_2 = extension_2
     #    self.extension_3 = extension_3
 
-    def __init__(self):
+    def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False):
         self.T = 3600           # End time: one hour -> 3600 s
         self.t = 0              # starting time
+
+        self.queue_speeds = queue_speeds  # Determines how many queses there are and how fast they are
+        self.mobile_store = mobile_store  # Determines whether there is a mobile store and how many groups are using it.
+        self.card_only = card_only        # Determines whether only payment by card is accepted.
 
         self.event_list = []    # Event list
 
@@ -30,9 +34,8 @@ class Simulation:
 
         # Create Queues
         queues = Queues()
-        queues.add_queue()
-        queues.add_queue()
-        queues.add_queue()
+        for queue_speed in self.queue_speeds:
+            queues.add_queue(queue_speed)
 
         # Push first event onto the event_list
         event = Event(0, self.t)
@@ -46,7 +49,7 @@ class Simulation:
             self.t = event.t
 
             if 0 == event.type:
-                tmp_events = event.handle_arrival_event(self.next_group_id)
+                tmp_events = event.handle_arrival_event(self.next_group_id, self.mobile_store, self.card_only)
                 self.next_group_id += 1
                 self.schedule_events(tmp_events)
 
