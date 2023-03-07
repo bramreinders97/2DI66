@@ -15,6 +15,17 @@ class Simulation:
     #    self.extension_3 = extension_3
 
     def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False):
+
+        """
+        Class that does one singe simulation.
+
+        :param queue_speeds:   array.   Determines how many queses there are (values of the array entries)
+                                        and how fast they are (length of the array)
+        :param mobile_store:   float.   Determines whether there is a mobile store and how many groups are using it.
+        :param card_only:      bool.    Determines whether only payment by card is accepted.
+
+        """
+
         self.T = 3600           # End time: one hour -> 3600 s
         self.t = 0              # starting time
 
@@ -30,6 +41,10 @@ class Simulation:
         self.group_time_list = []         # A list of a 2D array: (max serving time, nr. of group members in the system)
 
     def simulate(self):
+
+        """
+        Carries out one single simulation.
+        """
 
         # Create Queues
         queues = Queues()
@@ -80,6 +95,12 @@ class Simulation:
                 break
 
     def schedule_events(self, events):
+
+        """
+        Schedules all events. The events to be scheduled are given in the argument and are pushed into the event list.
+
+        :param events:  array.  An array of events.
+        """
 
         for event in events:
             heapq.heappush(self.event_list, (event.t, event))
