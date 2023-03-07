@@ -20,8 +20,10 @@ class Simulation:
         Class that does one singe simulation.
 
         :param queue_speeds:   array.   Determines how many queses there are (values of the array entries)
+                                        1 => Cashier works at 100% speed.
                                         and how fast they are (length of the array)
         :param mobile_store:   float.   Determines whether there is a mobile store and how many groups are using it.
+                                        0.15 => 15% of the Groups go to the mobile store. Value must be between 0 and 1.
         :param card_only:      bool.    Determines whether only payment by card is accepted.
 
         """
