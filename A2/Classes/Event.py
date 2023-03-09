@@ -1,6 +1,6 @@
 import random
-
 from A2.Classes.Customer import Customer
+
 
 class Event:
 
@@ -9,7 +9,6 @@ class Event:
     DEPARTURE = 2
 
     def __init__(self, event_type, t, customer=None):
-
         """
         Class that represents an event and handles the different types of events
 
@@ -23,7 +22,6 @@ class Event:
         self.customer = customer    # Customer linked to the event
 
     def handle_arrival_event(self, group_id, mobile_store, card_only):
-
         """
         Handles a type zero (ARRIVAL) event.
 
@@ -43,12 +41,13 @@ class Event:
         # Get the arrival time of the next group
         if not mobile_store:
             # TODO: Poisson Process
-            time_till_next_arrival = 15         # The time until the next group arrives
+            time_till_next_arrival = 30        # The time until the next group arrives
         else:
             time_till_next_arrival = 0
-            while True:                     # Iterate as long as one group does not choose the mobile store.
+            # Iterate as long as one group does not choose the mobile store.
+            while True:
                 # TODO: Poisson Process
-                time_till_next_arrival += 15    # The time until the next group arrives
+                time_till_next_arrival += 30    # The time until the next group arrives
                 tmp = random.random()
                 if tmp > mobile_store:
                     break
@@ -56,16 +55,23 @@ class Event:
         # Create an ENTER_QUEUE event for all customers in the group
         for i in range(n_group_members):
             tmp_customer = Customer(self.t, group_id, card_only)
-            new_events.append(Event(1, self.t + tmp_customer.get_food_time, tmp_customer))
+            new_events.append(
+                Event(1, self.t + tmp_customer.get_food_time, tmp_customer))
+
+        # get the number of new people in the canteen
+        new_people_in_canteen = len(new_events)
 
         # Create one new ARRIVAL event.
-        new_events.append(Event(0, self.t + time_till_next_arrival))
+        # Only do this if self.t < 3600. This is done to ensure that we keep going once
+        # the hour is over until everyone left without having new people enter
+        new_arrival_time = self.t + time_till_next_arrival
+        if new_arrival_time < 35:  # to be changed back to 3600 after testing period
+            new_events.append(Event(0, new_arrival_time))
 
         # Return the list of new events to be added.
-        return new_events
+        return new_events, new_people_in_canteen
 
     def handle_enter_queue_event(self, queues):
-
         """
         Handles a type one (ENTER_QUEUE) event.
 
@@ -82,8 +88,12 @@ class Event:
             if queues.queues[i].customers_in_queue <= shortest_queue:
                 shortest_queue_id = i
 
+        # Register the moment this customer enters the queue
+        self.customer.log_enter_queue_time(self.t)
+
         # update to queue
-        time_needed = queues.queues[shortest_queue_id].update_queue_type_1(self.t, self.customer.payment_method)
+        time_needed = queues.queues[shortest_queue_id].update_queue_type_1(
+            self.t, self.customer.payment_method)
 
         # create new DEPATURE event
         self.customer.queue = shortest_queue_id
@@ -93,13 +103,11 @@ class Event:
         return new_events
 
     def handle_departure_event(self, queue):
-
         """
         Handles a type two (DEPARTURE) event.
 
         :param queue:  Class.  A class that contains all the information about the queue the Customer belongs to.
         """
-
         queue.update_queue_type_2(self.t)
         return queue
 
