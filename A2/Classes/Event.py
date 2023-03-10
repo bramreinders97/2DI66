@@ -84,12 +84,28 @@ class Event:
         # Initialize a list of new events to be added.
         new_events = []
 
-        # get shortest queue (when equal the highest index is taken)
+        # An array that holds the index of the shortest queue or queues in cse of a tie
+        tie_queue_ids = []
+
+        # get shortest queue (when equal ties are broken randomly)
+        # The queue with the index 0 is initialized as the first entry.
         shortest_queue = queues.queues[0].customers_in_queue
-        shortest_queue_id = 0
+        tie_queue_ids.append(0)
+
+        # A for-loop through all the queues except the first one.
         for i in range(1, len(queues.queues)):
-            if queues.queues[i].customers_in_queue <= shortest_queue:
-                shortest_queue_id = i
+
+            # In the case of a lower value the list od ids is newly crated with only the ned index as an entry.
+            if queues.queues[i].customers_in_queue < shortest_queue:
+                tie_queue_ids = [i]
+                shortest_queue = queues.queues[i].customers_in_queue
+
+            # If there is a tie the index of the other queue is added to the list.
+            elif queues.queues[i].customers_in_queue == shortest_queue:
+                tie_queue_ids.append(i)
+
+        # Pick a random id form the list.
+        shortest_queue_id = random.choice(tie_queue_ids)
 
         # Register the moment this customer enters the queue
         self.customer.log_enter_queue_time(self.t)
