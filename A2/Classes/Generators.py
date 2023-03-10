@@ -18,7 +18,7 @@ def next_group_arriving(lam):
     Returns time until the next group arrives at a group arriving event
     :return: float
     """
-    return np.random.exponential(1/lam)
+    return np.random.exponential(1/lam) #maybe this needs to be simply lam? not sure
 
 def time_for_getting_food(n):
     """

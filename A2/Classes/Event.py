@@ -1,5 +1,6 @@
 import random
 from A2.Classes.Customer import Customer
+from A2.Classes.Generators import geo_distr, next_group_arriving
 
 
 class Event:
@@ -21,7 +22,7 @@ class Event:
         self.t = t                  # Time of the event
         self.customer = customer    # Customer linked to the event
 
-    def handle_arrival_event(self, group_id, mobile_store, card_only):
+    def handle_arrival_event(self, group_id, mobile_store, card_only, lam):
         """
         Handles a type zero (ARRIVAL) event.
 
@@ -29,25 +30,27 @@ class Event:
         :param mobile_store:    float.  The percentage if a group chooses the mobile store. 0 if there is no
                                         mobile store.
         :param card_only:       bool.   True if only payment by card is accepted.
+        :param lam:             float.  Lambda, the rate of new groups arriving per minute
         """
 
         # Initialize a list of new events to be added.
         new_events = []
 
         # get the number of Customers in the group.
-        # TODO: Distribution
-        n_group_members = 3
+        # Geometric distribution with mean 3
+
+        n_group_members = geo_distr(3)
 
         # Get the arrival time of the next group
         if not mobile_store:
-            # TODO: Poisson Process
-            time_till_next_arrival = 30        # The time until the next group arrives
+
+            time_till_next_arrival = next_group_arriving(lam)#30        # The time until the next group arrives
         else:
             time_till_next_arrival = 0
             # Iterate as long as one group does not choose the mobile store.
             while True:
-                # TODO: Poisson Process
-                time_till_next_arrival += 30    # The time until the next group arrives
+
+                time_till_next_arrival += next_group_arriving(lam)    # The time until the next group arrives
                 tmp = random.random()
                 if tmp > mobile_store:
                     break
@@ -65,7 +68,7 @@ class Event:
         # Only do this if self.t < 3600. This is done to ensure that we keep going once
         # the hour is over until everyone left without having new people enter
         new_arrival_time = self.t + time_till_next_arrival
-        if new_arrival_time < 35:  # to be changed back to 3600 after testing period
+        if new_arrival_time < 3600:  # to be changed back to 3600 after testing period
             new_events.append(Event(0, new_arrival_time))
 
         # Return the list of new events to be added.

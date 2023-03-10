@@ -1,3 +1,5 @@
+from A2.Classes.Generators import expo_distr
+
 class Queue:
 
     def __init__(self, cashier_speed):
@@ -27,11 +29,11 @@ class Queue:
 
         # Determine the time the cashier needs to server the customer
         if "cash" == payment_method:
-            # TODO: Distribution
-            time_needed_for_customer = 20
+            # Exponential distribution with mean 20
+            time_needed_for_customer = expo_distr(1/20)
         elif "card" == payment_method:
-            # TODO: Distribution
-            time_needed_for_customer = 12
+            # exponential distribution with mean 12
+            time_needed_for_customer = expo_distr(1/12)
         else:
             print("ERROR: in queue: payment method")
             return False
