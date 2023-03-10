@@ -108,7 +108,7 @@ class Simulation:
 
                 slow_cashier = bool(
                     queues.queues[event.customer.queue].cashier_speed > 1)
-                print('slow: ', slow_cashier)
+                #print('slow: ', slow_cashier)
 
                 # Register departure in Results Class
                 results.registerDeparture(event.customer, slow_cashier)
@@ -122,7 +122,8 @@ class Simulation:
             else:
                 print("ERROR: in simulate: unknown event type")
                 break
-        print("last group:", self.next_group_id-1)
+        #print("last group:", self.next_group_id-1)
+        results.group_count = self.next_group_id #added to be able to check if group count makes sense
         return results
 
     def schedule_events(self, events):

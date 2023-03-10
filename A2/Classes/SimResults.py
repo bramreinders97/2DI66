@@ -66,7 +66,7 @@ class SimulateResults:
         self.nPeopleHistogram[min(
             n_people, self.MAX_PEOPLE_IN_CANTEEN)] += time
 
-        print(self.nPeopleHistogram[:6])
+        #print(self.nPeopleHistogram[:6])
 
     def registerGroupArrival(self):
         # New group has arrived -> Append a new entry to the deque keeping track of sojourn time for groups
