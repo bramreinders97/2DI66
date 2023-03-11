@@ -46,7 +46,6 @@ class Customer:
 
         # Decide how long the Customer needs to get the food
         #this is a exponential distribution with mean 80
-
         return expo_distr(80)
 
     def log_enter_queue_time(self, t):
