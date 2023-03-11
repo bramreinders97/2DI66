@@ -79,7 +79,7 @@ class Answers:
 
                     """)
 
-    def Extension_1(self, n_simulations=2000):
+    def extension_1(self, n_simulations=2000):
 
         """
         The code to answer the question for the model extension 1.
@@ -89,35 +89,36 @@ class Answers:
 
         def sim_1(n, lam=1):
 
-            Mean_Queue_time_Fast = []
-            SD_Queue_time_Fast = []
+            mean_queue_time_fast = []
+            sd_queue_time_fast = []
 
-            Mean_Queue_time_Slow = []
-            SD_Queue_time_Slow = []
+            mean_queue_time_slow = []
+            sd_queue_time_slow = []
 
             for i in range(n):
-                simulation = Simulation([1, 1.25, 1], 0.15, True, lam / 60)
+                simulation = Simulation([1, 1.25, 1], 0, True, lam / 60)
                 sim = simulation.simulate()
 
-                Mean_Queue_time_Fast.append(sim.getMeanQueueTime())
-                SD_Queue_time_Fast.append(sim.getStDevQueueTime())
+                mean_queue_time_fast.append(sim.getMeanQueueTime())
+                sd_queue_time_fast.append(sim.getStDevQueueTime())
 
-                Mean_Queue_time_Slow.append(sim.getMeanQueueTimeSlow())
-                SD_Queue_time_Slow.append(sim.getStDevQueueTimeSlow())
+                mean_queue_time_slow.append(sim.getMeanQueueTimeSlow())
+                sd_queue_time_slow.append(sim.getStDevQueueTimeSlow())
 
+                # A small counter to know how far the simulation already is.
                 if i % 1000 == 0:
                     print("\r Simulation: " + str(i) + "/" + str(n), end="")
 
             print()
             print("lambda: " + str(lam))
-            mean_fast = np.mean(Mean_Queue_time_Fast)
-            sd_fast = np.mean(SD_Queue_time_Fast)
+            mean_fast = np.mean(mean_queue_time_fast)
+            sd_fast = np.mean(sd_queue_time_fast)
             hw_fast = 1.96 * np.sqrt((sd_fast ** 2) / n)
             print("Fast: mean: " + str(np.round(mean_fast, 3)) + " sd: " + str(np.round(sd_fast, 3)) + " hw:  " + str(
                 np.round(hw_fast, 3)))
 
-            mean_slow = np.mean(Mean_Queue_time_Slow)
-            sd_slow = np.mean(SD_Queue_time_Slow)
+            mean_slow = np.mean(mean_queue_time_slow)
+            sd_slow = np.mean(sd_queue_time_slow)
             hw_slow = 1.96 * np.sqrt((sd_slow ** 2) / n)
             print("Slow: mean: " + str(np.round(mean_slow, 3)) + " sd: " + str(np.round(sd_slow, 3)) + " hw:  " + str(
                 np.round(hw_slow, 3)))
@@ -130,3 +131,85 @@ class Answers:
         sim_1(n_simulations, 3)
         sim_1(n_simulations, 4)
         sim_1(n_simulations, 10)
+
+    def extension_2(self, n_simulations=2000):
+
+        """
+        The code to answer the question for the model extension 2.
+
+        :param n_simulations:   int.  The number of simulations performed.
+        """
+
+        def sim_2(n, lam=1):
+
+            mean_queue_time_0 = []
+            sd_queue_time_0 = []
+            mean_queue_time_15 = []
+            sd_queue_time_15 = []
+
+            mean_sojourn_time_0 = []
+            sd_sojourn_time_0 = []
+            mean_sojourn_time_15 = []
+            sd_sojourn_time_15 = []
+
+            for i in range(n):
+
+                # Simulate without chance that a group chooses the mobile food stand
+                simulation = Simulation([1, 1, 1], 0, True, lam / 60)
+                sim = simulation.simulate()
+                mean_queue_time_0.append(sim.getMeanQueueTime())
+                sd_queue_time_0.append(sim.getStDevQueueTime())
+                mean_sojourn_time_0.append(sim.getMeanSojournTime())
+                sd_sojourn_time_0.append(sim.getStDevSojournTime())
+
+                # Simulate with a 15% chance that a group chooses the mobile food stand
+                simulation = Simulation([1, 1, 1], 0.15, True, lam / 60)
+                sim = simulation.simulate()
+                mean_queue_time_15.append(sim.getMeanQueueTime())
+                sd_queue_time_15.append(sim.getStDevQueueTime())
+                mean_sojourn_time_15.append(sim.getMeanSojournTime())
+                sd_sojourn_time_15.append(sim.getStDevSojournTime())
+
+                # A small counter to know how far the simulation already is.
+                if i % 1000 == 0:
+                    print("\r Simulation: " + str(i) + "/" + str(n), end="")
+
+            print()
+            print("--------------------------------------")
+            print("lambda: " + str(lam))
+            print("waiting time")
+            mean_0 = np.mean(mean_queue_time_0)
+            sd_0 = np.mean(sd_queue_time_0)
+            hw_0 = 1.96 * np.sqrt((sd_0 ** 2) / n)
+            print("0: mean: " + str(np.round(mean_0, 3)) + " sd: " + str(np.round(sd_0, 3)) + " hw:  " + str(
+                np.round(hw_0, 3)))
+
+            mean_15 = np.mean(mean_queue_time_15)
+            sd_15 = np.mean(sd_queue_time_15)
+            hw_15 = 1.96 * np.sqrt((sd_15 ** 2) / n)
+            print("0.15: mean: " + str(np.round(mean_15, 3)) + " sd: " + str(np.round(sd_15, 3)) + " hw:  " + str(
+                np.round(hw_15, 3)))
+
+            print("Difference in percent: " + str(np.round(mean_15 / mean_0, 3)))
+            print()
+
+            print("sojourn time")
+            mean_0 = np.mean(mean_sojourn_time_0)
+            sd_0 = np.mean(sd_sojourn_time_0)
+            hw_0 = 1.96 * np.sqrt((sd_0 ** 2) / n)
+            print("0: mean: " + str(np.round(mean_0, 3)) + " sd: " + str(np.round(sd_0, 3)) + " hw:  " + str(
+                np.round(hw_0, 3)))
+
+            mean_15 = np.mean(mean_sojourn_time_15)
+            sd_15 = np.mean(sd_sojourn_time_15)
+            hw_15 = 1.96 * np.sqrt((sd_15 ** 2) / n)
+            print("0.15: mean: " + str(np.round(mean_15, 3)) + " sd: " + str(np.round(sd_15, 3)) + " hw:  " + str(
+                np.round(hw_15, 3)))
+
+            print("Difference in percent: " + str(np.round(mean_15 / mean_0, 3)))
+            print("--------------------------------------")
+
+        sim_2(n_simulations, 1)
+        sim_2(n_simulations, 2)
+        sim_2(n_simulations, 3)
+        sim_2(n_simulations, 4)
