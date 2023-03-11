@@ -11,10 +11,7 @@ def geo_distr(mean):
 #poisson process generator: time between events is an exponential distribution
 #exponential distribution:
 def expo_distr(lam):
-
-    # TODO
-    tmp = np.random.exponential(1/lam)
-    print(tmp)
+    tmp = np.random.exponential(lam)
     return tmp
 
 def next_group_arriving(lam):
@@ -22,7 +19,7 @@ def next_group_arriving(lam):
     Returns time until the next group arrives at a group arriving event
     :return: float
     """
-    return np.random.exponential(1/lam) #maybe this needs to be simply lam? not sure
+    return np.random.exponential(lam) #maybe this needs to be simply lam? not sure
 
 def time_for_getting_food(n):
     """
@@ -30,7 +27,7 @@ def time_for_getting_food(n):
     :param n: int
     :return: array[float]
     """
-    return np.random.exponential(1 / 80, size=n)
+    return np.random.exponential( 80, size=n)
 
 #cash: np.random.exponential(1/20)
 #card: np.random.exponential(1/12)
