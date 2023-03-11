@@ -95,8 +95,6 @@ class Answers:
             Mean_Queue_time_Slow = []
             SD_Queue_time_Slow = []
 
-            n = 2000
-
             for i in range(n):
                 simulation = Simulation([1, 1.25, 1], 0.15, True, lam / 60)
                 sim = simulation.simulate()
