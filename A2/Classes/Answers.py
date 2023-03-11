@@ -11,10 +11,12 @@ class Answers:
     A small class in order to structure the code needed to answer the questions of the assignment.
     """
 
-    def Q1(self):
+    def Q1(self, n_simulations):
 
         def sd(my_list, mean):
             return math.sqrt(sum([(i - mean) ** 2 for i in my_list]) / len(my_list))
+
+
 
         start = time()
         for lam in range(1, 5):
@@ -28,9 +30,9 @@ class Answers:
             EN_sd_list = []
             ESg_sd_list = []
 
-            for i in range(100):
+            for i in range(n_simulations):
                 # create and run simulation
-                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam / 60)
+                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam /60)
                 results = simulator.simulate()
                 # add desired values to all summary lists
                 # E[W] waiting time (over all cashiers): getMeanQueueTime()
@@ -47,6 +49,8 @@ class Answers:
                 ESg_sd_list.append(results.getStDevSojournGroup())
                 # nr of groups in total
                 group_count_list.append(results.group_count)
+
+
 
             # calculate standard deviations and means of the lists
             EW_mean = sum(EW_list) / len(EW_list)
@@ -68,7 +72,7 @@ class Answers:
 
             print(f"""
 
-            lambda = {lam}
+            lambda = {lam}, nr of runs {n_simulations}
             Average nr of groups per simulation: {groups_mean:.2f} (sd: {groups_sd:.2f})
             E [Waiting]: {EW_mean:.2f}, sd[E[Waiting]] {EW_sd:.2f}, E[sd[Waiting]] {EW_sd_mean:.2f}
             E Sojourn: {ES_mean:.2f}, sd[E] {ES_sd:.2f}, E[sd[Sojourn] {ES_sd_mean:.2f}

@@ -30,10 +30,10 @@ class Queue:
         # Determine the time the cashier needs to server the customer
         if "cash" == payment_method:
             # Exponential distribution with mean 20
-            time_needed_for_customer = expo_distr(1/20)
+            time_needed_for_customer = expo_distr(20)
         elif "card" == payment_method:
             # exponential distribution with mean 12
-            time_needed_for_customer = expo_distr(1/12)
+            time_needed_for_customer = expo_distr(12)
         else:
             print("ERROR: in queue: payment method")
             return False
