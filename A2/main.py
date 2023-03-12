@@ -1,10 +1,6 @@
-import numpy as np
-from Classes.Simulation import Simulation
-from collections import deque
+from A2.Classes.Answers import Answers
 
-simulator = Simulation(queue_speeds=[1, 1, 1])
+ans = Answers()
 
-results = simulator.simulate()
-
-print(results)
-print(f"{simulator.n_people_in_canteen} people in canteen")
+# ans.extension_2(20000)
+ans.Q1(200)

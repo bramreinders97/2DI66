@@ -1,4 +1,5 @@
 import random
+from A2.Classes.Generators import expo_distr
 
 
 class Customer:
@@ -44,8 +45,8 @@ class Customer:
         """
 
         # Decide how long the Customer needs to get the food
-        # TODO: Distribution
-        return 5
+        # this is a exponential distribution with mean 80
+        return expo_distr(80)
 
     def log_enter_queue_time(self, t):
         """

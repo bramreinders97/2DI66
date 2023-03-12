@@ -7,7 +7,7 @@ import heapq
 
 class Simulation:
 
-    def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False):
+    def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False, lam=1/60):
         """
         Class that does one singe simulation.
 
@@ -20,6 +20,7 @@ class Simulation:
         :param mobile_store:   float.   Determines whether there is a mobile store and how many groups are using it.
                                         0.15 => 15% of the Groups go to the mobile store. Value must be between 0 and 1.
         :param card_only:      bool.    Determines whether only payment by card is accepted.
+        :param lam:            float.   The mean number of groups that will arrive in an average *second*. Lambda for minute/60
 
         """
 
@@ -32,12 +33,8 @@ class Simulation:
         self.mobile_store = mobile_store
         # Determines whether only payment by card is accepted.
         self.card_only = card_only
-        # Determines how many queses there are and how fast they are
-        self.queue_speeds = queue_speeds
-        # Determines whether there is a mobile store and how many groups are using it.
-        self.mobile_store = mobile_store
-        # Determines whether only payment by card is accepted.
-        self.card_only = card_only
+        # Determines how fast new groups arrive: the mean number of groups in a minute
+        self.lam = lam
 
         self.event_list = []    # Event list
 
@@ -82,9 +79,7 @@ class Simulation:
 
             if 0 == event.type:
                 tmp_events, n_new_people = event.handle_arrival_event(
-                    self.next_group_id, self.mobile_store, self.card_only)
-                tmp_events, n_new_people = event.handle_arrival_event(
-                    self.next_group_id, self.mobile_store, self.card_only)
+                    self.next_group_id, self.mobile_store, self.card_only, self.lam)
                 self.next_group_id += 1
                 self.schedule_events(tmp_events)
 
@@ -121,7 +116,7 @@ class Simulation:
 
                 slow_cashier = bool(
                     queues.queues[event.customer.queue].cashier_speed > 1)
-                print('slow: ', slow_cashier)
+                #print('slow: ', slow_cashier)
 
                 # Register departure in Results Class
                 results.registerDeparture(event.customer, slow_cashier)
@@ -135,7 +130,9 @@ class Simulation:
             else:
                 print("ERROR: in simulate: unknown event type")
                 break
-
+        #print("last group:", self.next_group_id-1)
+        # added to be able to check if group count makes sense
+        results.group_count = self.next_group_id
         return results
 
     def schedule_events(self, events):
