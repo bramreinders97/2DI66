@@ -75,7 +75,7 @@ class Simulation:
             prev_time = self.t
             self.t = event.t
 
-            print(f"New event at t = {self.t}. Event: {event}")
+            # print(f"New event at t = {self.t}. Event: {event}")
 
             if 0 == event.type:
                 tmp_events, n_new_people = event.handle_arrival_event(

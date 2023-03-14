@@ -1,8 +1,12 @@
 from A2.Classes.Simulation import Simulation
+from A2.Classes.SimResults import SimulateResults
 
+import multiprocessing
+from joblib import Parallel, delayed
 import numpy as np
 import math
 from time import time
+import matplotlib.pyplot as plt
 
 
 class Answers:
@@ -15,8 +19,6 @@ class Answers:
 
         def sd(my_list, mean):
             return math.sqrt(sum([(i - mean) ** 2 for i in my_list]) / len(my_list))
-
-
 
         start = time()
         for lam in range(1, 5):
@@ -32,7 +34,7 @@ class Answers:
 
             for i in range(n_simulations):
                 # create and run simulation
-                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam /60)
+                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam / 60)
                 results = simulator.simulate()
                 # add desired values to all summary lists
                 # E[W] waiting time (over all cashiers): getMeanQueueTime()
@@ -49,8 +51,6 @@ class Answers:
                 ESg_sd_list.append(results.getStDevSojournGroup())
                 # nr of groups in total
                 group_count_list.append(results.group_count)
-
-
 
             # calculate standard deviations and means of the lists
             EW_mean = sum(EW_list) / len(EW_list)
@@ -83,8 +83,73 @@ class Answers:
 
                     """)
 
-    def extension_1(self, n_simulations=2000):
+    def plotHist(self, hist_lists, maxPeople=[35, 55, 65, 155]):
+        """ 
+        Plot the histogram showing the probability having k people in the canteen at once.
 
+        :param hist_lists: list. list containing the arrays containing all histograms of all runs added together
+        :param maxPeople: list. List of the max number of people in the canteen we're interested in for each lambda
+        """
+        fig, axs = plt.subplots(2, 2, figsize=(12, 12))
+
+        for i, ax in enumerate(axs.flat):
+            maxx = maxPeople[i] + 1
+            n_people_to_plot = hist_lists[i][0: maxx]
+            probabilities = n_people_to_plot / n_people_to_plot.sum(0)
+
+            ax.bar(range(0, maxx), probabilities)
+            ax.set_title(f"\u03BB = {i+1}")
+            ax.set(xlabel='k', ylabel='P (N = k)')
+
+        plt.show()
+
+    def Q3(self, n_runs, max_people=[35, 55, 65, 155]):
+
+        def one_run():
+            simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam / 60)
+            results = simulator.simulate()
+
+            stats_of_interest = {
+                'Hist': results.nPeopleHistogram,
+                'mean': results.getExpectedNPeopleInCanteen(),
+                'stDev': results.getStDevNPeopleInCanteen()
+            }
+
+            return stats_of_interest
+
+        # list to store all lists for #people in for eadch lambda
+        total_hists = [0, 0, 0, 0]
+
+        for lam in range(1, 5):
+
+            # run in parallel to speed up the process
+            num_cores = multiprocessing.cpu_count()
+
+            # that will be: run one game -> return results
+            results = \
+                Parallel(n_jobs=num_cores)(delayed(one_run)()
+                                           for _ in range(n_runs))
+
+            total_hist = np.zeros(SimulateResults.MAX_PEOPLE_IN_CANTEEN + 1)
+            exp_n_customers = np.zeros(n_runs)
+            std_dev_n_cust = np.zeros(n_runs)
+
+            for i, res in enumerate(results):
+                total_hist += np.array(res['Hist'])
+                exp_n_customers[i] = res['mean']
+                std_dev_n_cust[i] = res['stDev']
+
+            print()
+            print('\u03BB = ', lam,
+                  '. E[#people_in_canteen]: ', np.mean(exp_n_customers))
+            print('\u03BB = ', lam, '. Std Dev: ', np.mean(std_dev_n_cust))
+            print()
+
+            total_hists[lam-1] = total_hist
+
+        self.plotHist(total_hists, maxPeople=max_people)
+
+    def extension_1(self, n_simulations=2000):
         """
         The code to answer the question for the model extension 1.
 
@@ -127,7 +192,8 @@ class Answers:
             print("Slow: mean: " + str(np.round(mean_slow, 3)) + " sd: " + str(np.round(sd_slow, 3)) + " hw:  " + str(
                 np.round(hw_slow, 3)))
 
-            print("Difference in percent: " + str(np.round(mean_slow / mean_fast, 3)))
+            print("Difference in percent: " +
+                  str(np.round(mean_slow / mean_fast, 3)))
             print()
 
         sim_1(n_simulations, 1)
@@ -137,7 +203,6 @@ class Answers:
         sim_1(n_simulations, 10)
 
     def extension_2(self, n_simulations=2000):
-
         """
         The code to answer the question for the model extension 2.
 
@@ -194,7 +259,8 @@ class Answers:
             print("0.15: mean: " + str(np.round(mean_15, 3)) + " sd: " + str(np.round(sd_15, 3)) + " hw:  " + str(
                 np.round(hw_15, 3)))
 
-            print("Difference in percent: " + str(np.round(mean_15 / mean_0, 3)))
+            print("Difference in percent: " +
+                  str(np.round(mean_15 / mean_0, 3)))
             print()
 
             print("sojourn time")
@@ -210,7 +276,8 @@ class Answers:
             print("0.15: mean: " + str(np.round(mean_15, 3)) + " sd: " + str(np.round(sd_15, 3)) + " hw:  " + str(
                 np.round(hw_15, 3)))
 
-            print("Difference in percent: " + str(np.round(mean_15 / mean_0, 3)))
+            print("Difference in percent: " +
+                  str(np.round(mean_15 / mean_0, 3)))
             print("--------------------------------------")
 
         sim_2(n_simulations, 1)
