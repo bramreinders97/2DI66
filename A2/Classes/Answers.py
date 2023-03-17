@@ -217,3 +217,25 @@ class Answers:
         sim_2(n_simulations, 2)
         sim_2(n_simulations, 3)
         sim_2(n_simulations, 4)
+    def extension_3(self, n_simulations):
+        """
+        Gets the mean sojourn and waiting time using card only mode
+        :return:
+        """
+        start = time()
+        for lam in range(1, 5):
+            mean_waiting_list = []
+            mean_sojourn_list = []
+            for i in range(n_simulations):
+                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam / 60, card_only=True)
+                results = simulator.simulate()
+
+                mean_waiting_list.append(results.getMeanQueueTime())
+                mean_sojourn_list.append(results.getMeanSojournTime())
+            print(f"""
+                    lambda: {lam}, nr of runs: {n_simulations}
+                    Mean waiting time: {sum(mean_waiting_list)/len(mean_waiting_list):.2f}
+                    Mean sojourn time: {sum(mean_sojourn_list)/len(mean_sojourn_list):.2f}
+                    runtime: {time() - start:.2f}
+                    """)
+
