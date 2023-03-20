@@ -28,9 +28,9 @@ class Event:
         """
 
         if self.event_type == 0: #NEW_QUEUER
-            temp_event = self.floor.new_queuer(t)
+            temp_event = self.floor.new_queuer(self.t)
         elif self.event_type == 1: #ELEVATOR_ARRIVES
-            temp_event = self.elevator.reach_floor(self.t, self.floor)
+            temp_event = self.elevator.reach_floor(self.t, self.floor, self.destination_floor)
         elif self.event_type == 2: #ENTER_ELEVATOR
             self.elevator.add_person(self.floor)
             temp_event = self.elevator.schedule_next_event(self.t, self.floor)
@@ -41,6 +41,17 @@ class Event:
             raise ValueError(f"ERROR: in event handler: unknown event type {self.event_type}")
 
         return temp_event
+
+    def __str__(self):
+        string = f"type: {self.event_type}, time: {self.t:.2f}"
+        if self.elevator:
+            string += f", elevator: {self.elevator.id_nr}"
+        if self.floor:
+            string += f", floor: {self.floor.floor_nr}"
+        if self.destination_floor:
+            string += f", destination floor: {self.destination_floor}"
+
+        return string
 
 
 

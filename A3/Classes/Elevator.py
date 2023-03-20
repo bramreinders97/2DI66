@@ -1,16 +1,17 @@
-from Floor import Floor
-from Event import Event
+from A3.Classes.Floor import Floor
+from A3.Classes.Event import Event
 import numpy as np
 
 class Elevator:
 
     capacity = 10
 
-    def __init__(self):
+    def __init__(self, id):
         """
         Class that represents an elevator. Has a current floor, open-close state, direction (up or down) and list of people inside it.
         """
 
+        self.id_nr = id
         self.floor = 0
         self.open = True
         self.going_up = True
@@ -36,9 +37,10 @@ class Elevator:
         for i in range(len(self.people)):
             if self.people[i].destination == self.floor:
                 self.people.pop(i)
+                break
 
 
-    def reach_floor(self, t, current_floor : Floor):
+    def reach_floor(self, t, current_floor : Floor, destination_floor):
         """
         Event for reaching a certain floor.
         Schedule another event, but accounting for opening or not closing the doors
@@ -46,10 +48,12 @@ class Elevator:
 
         :return:
         """
+        self.floor = destination_floor
+
         # change elevator direction
-        if self.floor_nr == 4:
+        if self.floor == 4:
             self.going_up = False
-        if self.floor_nr == 0:
+        if self.floor == 0:
             self.going_up = True
         #schedule next event with time adjustment
         next_event = self.schedule_next_event(t, current_floor)
@@ -84,9 +88,9 @@ class Elevator:
 
         # move floor up or down:
         if self.going_up:
-            new_floor = self.floornr+1
+            new_floor = self.floor+1
         else:
-            new_floor = self.floornr-1
+            new_floor = self.floor-1
 
         #new time: +6s + closing doors exponential mean 3
         new_time = t + 6 +  np.random.exponential(3)

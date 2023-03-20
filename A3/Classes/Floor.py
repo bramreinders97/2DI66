@@ -1,6 +1,6 @@
-from Event import Event
+from A3.Classes.Event import Event
 import numpy as np
-from Person import Person
+from A3.Classes.Person import Person
 
 class Floor():
     def __init__(self, floor_nr, probs, arrive_rate):
