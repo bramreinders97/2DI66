@@ -64,7 +64,7 @@ class Elevator:
         #schedule next event with time adjustment
         next_event = self.schedule_next_event(t, current_floor)
         if next_event.event_type == 1:
-            next_event.t = t+6      # Comment 1: Why overwriting next_event.t ?
+            next_event.t = t+6      # Comment 1 part 1: Why overwriting next_event.t ?
         else:
             next_event.t += np.random.exponential(3)
         return next_event
@@ -110,6 +110,6 @@ class Elevator:
             new_floor = self.floor-1
 
         #new time: +6s + closing doors exponential mean 3
-        new_time = t + 6 +  np.random.exponential(3)
+        new_time = t + 6 +  np.random.exponential(3)  # Comment 1 part 2: I think you are setting the time here already.
         return Event(1, new_time, self, None, new_floor)
 
