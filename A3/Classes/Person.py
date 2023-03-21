@@ -11,3 +11,6 @@ class Person():
 
         self.destination = destination
         self.start_time = start_time
+
+        self.enter_elevator = -1    # The time the Person has finished entering the elevator.
+        self.leave_elevator = -1    # The time the Person has finished exiting the elevator.

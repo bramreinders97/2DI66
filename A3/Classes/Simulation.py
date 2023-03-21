@@ -1,5 +1,6 @@
 from A3.Classes.Elevator import Elevator
 from A3.Classes.Floor import Floor
+from A3.Classes.SimResults import SimulateResults
 import heapq
 
 class Simulation:
@@ -33,6 +34,8 @@ class Simulation:
         :return:
         """
 
+        simulation_results = SimulateResults()
+
         #add starting events: all elevators start to move & all floors schedule their first group arriving
         for elevator in self.elevators:
             event = elevator.schedule_next_event(self.t, self.floors[elevator.floor])
@@ -52,7 +55,11 @@ class Simulation:
             self.t = event.t
 
             #handle the events
-            new_event = event.handle_event()
+            new_event, finished_person = event.handle_event()
+
+            if finished_person:
+                simulation_results.list_of_persons.append(finished_person)
+                print("hi")
 
             if new_event.event_type == 1:
                 #rewrite the floor nr into the actual floor
@@ -61,3 +68,5 @@ class Simulation:
             print(f"time: {self.t:.2f}, added {new_event}")
 
             heapq.heappush(self.event_list, (new_event.t, new_event))
+
+        return simulation_results
