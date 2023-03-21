@@ -81,10 +81,13 @@ class Elevator:
                 return Event(3, t+1, self, current_floor)
 
         #check for enterers:
-        if self.going_up:
-            if current_floor.up_queue:
-                return Event(2, t+1, self, current_floor)
-
+        if len(self.people) < self.capacity:
+            if self.going_up:
+                if current_floor.up_queue:
+                    return Event(2, t+1, self, current_floor)
+            else:
+                if current_floor.down_queue:
+                    return Event(2, t+1, self, current_floor)
 
         # move floor up or down:
         if self.going_up:
