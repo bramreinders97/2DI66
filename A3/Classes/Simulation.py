@@ -58,8 +58,8 @@ class Simulation:
             new_event, finished_person = event.handle_event()
 
             if finished_person:
-                simulation_results.list_of_persons.append(finished_person)
-                print("hi")
+                if 3 == event.event_type:
+                    simulation_results.list_of_persons.append(finished_person)
 
             if new_event.event_type == 1:
                 #rewrite the floor nr into the actual floor
