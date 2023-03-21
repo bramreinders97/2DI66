@@ -27,22 +27,23 @@ class Event:
         :return:
         """
 
-        finished_person = False
+        additional_data = False
 
-        if self.event_type == 0: #NEW_QUEUER
+        if self.event_type == 0:  # NEW_QUEUER
             temp_event = self.floor.new_queuer(self.t)
-        elif self.event_type == 1: #ELEVATOR_ARRIVES
+        elif self.event_type == 1:  # ELEVATOR_ARRIVES
+            additional_data = len(self.elevator.people)
             temp_event = self.elevator.reach_floor(self.t, self.floor, self.destination_floor)
-        elif self.event_type == 2: #ENTER_ELEVATOR
+        elif self.event_type == 2:  # ENTER_ELEVATOR
             self.elevator.add_person(self.floor, self.t)
             temp_event = self.elevator.schedule_next_event(self.t, self.floor)
-        elif self.event_type == 3: #LEAVE_ELEVATOR:
-            finished_person = self.elevator.remove_person(self.t)
+        elif self.event_type == 3:  # LEAVE_ELEVATOR:
+            additional_data = self.elevator.remove_person(self.t)
             temp_event = self.elevator.schedule_next_event(self.t, self.floor)
         else:
             raise ValueError(f"ERROR: in event handler: unknown event type {self.event_type}")
 
-        return temp_event, finished_person
+        return temp_event, additional_data
 
     def __str__(self):
         string = f"type: {self.event_type}, time: {self.t:.2f}"

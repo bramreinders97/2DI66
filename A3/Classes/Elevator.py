@@ -64,7 +64,7 @@ class Elevator:
         #schedule next event with time adjustment
         next_event = self.schedule_next_event(t, current_floor)
         if next_event.event_type == 1:
-            next_event.t = t+6      # Comment: Why overwriting next_event.t ?
+            next_event.t = t+6      # Comment 1: Why overwriting next_event.t ?
         else:
             next_event.t += np.random.exponential(3)
         return next_event
@@ -87,10 +87,21 @@ class Elevator:
                 return Event(3, t+1, self, current_floor)
 
         #check for enterers:
-        if self.going_up:
+        if self.going_up:   # Comment 2: I guess it must be checked whether the elevator is full already.
             if current_floor.up_queue:
                 return Event(2, t+1, self, current_floor)
+        # Comment 3: I think this needs to be added, but it leads to an error
+        #else:
+        #    if current_floor.down_queue:
+        #        return Event(2, t+1, self, current_floor)
 
+        # Collect the data of people who could not enter
+        if self.going_up:
+            for person in current_floor.up_queue:
+                person.could_not_enter_count += 1
+        else:
+            for person in current_floor.down_queue:
+                person.could_not_enter_count += 1
 
         # move floor up or down:
         if self.going_up:
