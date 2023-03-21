@@ -17,26 +17,32 @@ class Elevator:
         self.going_up = True
         self.people = []
 
-    def add_person(self, floor):
+    def add_person(self, floor, current_time):
         """
         Have a person enter the elevator, if possible
         :return:
         """
         if self.going_up:
             if floor.up_queue:
-                self.people.append(floor.up_queue.pop())
+                tmp_person = floor.up_queue.pop()
+                tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                self.people.append(tmp_person)
         else:
             if floor.down_queue:
-                self.people.append(floor.down_queue.pop())
+                tmp_person = floor.up_queue.pop()
+                tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                self.people.append(tmp_person)
 
-    def remove_person(self):
+    def remove_person(self, current_time):
         """
         Remove a person with this floor as destination from the elevator.
         :return:
         """
         for i in range(len(self.people)):
             if self.people[i].destination == self.floor:
-                self.people.pop(i)
+                tmp_person = self.people.pop(i)
+                tmp_person.leave_elevator = current_time+1  # +1 because he needs one second to leave the elevator.
+                return tmp_person
                 break
 
 
@@ -58,7 +64,7 @@ class Elevator:
         #schedule next event with time adjustment
         next_event = self.schedule_next_event(t, current_floor)
         if next_event.event_type == 1:
-            next_event.t = t+6
+            next_event.t = t+6      # Comment 1 part 1: Why overwriting next_event.t ?
         else:
             next_event.t += np.random.exponential(3)
         return next_event
@@ -89,6 +95,14 @@ class Elevator:
                 if current_floor.down_queue:
                     return Event(2, t+1, self, current_floor)
 
+        # Collect the data of people who could not enter
+        if self.going_up:
+            for person in current_floor.up_queue:
+                person.could_not_enter_count += 1
+        else:
+            for person in current_floor.down_queue:
+                person.could_not_enter_count += 1
+
         # move floor up or down:
         if self.going_up:
             new_floor = self.floor+1
@@ -96,6 +110,6 @@ class Elevator:
             new_floor = self.floor-1
 
         #new time: +6s + closing doors exponential mean 3
-        new_time = t + 6 +  np.random.exponential(3)
+        new_time = t + 6 +  np.random.exponential(3)  # Comment 1 part 2: I think you are setting the time here already.
         return Event(1, new_time, self, None, new_floor)
 
