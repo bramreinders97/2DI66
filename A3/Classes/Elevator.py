@@ -29,7 +29,7 @@ class Elevator:
                 self.people.append(tmp_person)
         else:
             if floor.down_queue:
-                tmp_person = floor.up_queue.pop(0)
+                tmp_person = floor.down_queue.pop(0)
                 tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
                 self.people.append(tmp_person)
 
