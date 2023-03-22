@@ -34,7 +34,7 @@ class Simulation:
         :return:
         """
 
-        simulation_results = SimulateResults()
+        simulation_results = SimulateResults(5)
 
         #add starting events: all elevators start to move & all floors schedule their first group arriving
         for elevator in self.elevators:
@@ -45,10 +45,10 @@ class Simulation:
             event = floor.schedule_next_event(self.t)
             heapq.heappush(self.event_list, (event.t, event))
 
-        print("list of starting events:")
-        for i in self.event_list:
-            print(i[1])
-        print("list finished")
+        #print("list of starting events:")
+        #for i in self.event_list:
+        #    print(i[1])
+        #print("list finished")
 
         while self.T > self.t:
             event = heapq.heappop(self.event_list)[1]

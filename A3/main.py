@@ -7,4 +7,4 @@ results = simulation.simulate()
 
 results.make_calculations()
 
-print(results.mean_waiting_time)
+print(results)

@@ -34,5 +34,5 @@ class Floor():
     def new_queuer(self, t):
         #choose destination for person based on probs
         destination = np.random.choice([0,1,2,3,4], p = self.probs)
-        self.add_to_queue(Person(destination, t))
+        self.add_to_queue(Person(destination, t, self.floor_nr))
         return self.schedule_next_event(t)
