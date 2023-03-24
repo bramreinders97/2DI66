@@ -34,7 +34,7 @@ class Simulation:
         :return:
         """
 
-        simulation_results = SimulateResults(5)
+        simulation_results = SimulateResults()
 
         #add starting events: all elevators start to move & all floors schedule their first group arriving
         for elevator in self.elevators:

@@ -2,7 +2,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, nr_floors):
+    def __init__(self, nr_floors=5):
 
         """
         Class that keeps track of the important data and calculates the results.
