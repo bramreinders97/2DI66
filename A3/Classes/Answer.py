@@ -15,8 +15,21 @@ class Answer:
     def question_2(self):
         pass
 
-    def question_3(self):
-        pass
+    def question_3(self, n_runs=10000, sim_time=8*60, elevators=[1, 2, 3, 4, 5]):
+
+        # Iterate over the number of runs.
+        for i in range(n_runs):
+
+            # Display how far the simulation is.
+            if i % 100 == 0:
+                print("\r Game: " + str(i) + "/" + str(n_runs), end="")
+
+            # Iterate over different numbers of elevators
+            for j in range(len(elevators)):
+                # Execute simulation and make calculations.
+                simulation = Simulation(sim_time, elevators[j])
+                results = simulation.simulate()
+                results.make_calculations()
 
     def question_4(self):
         pass

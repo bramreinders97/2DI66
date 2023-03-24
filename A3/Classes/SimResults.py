@@ -15,13 +15,15 @@ class SimulateResults:
 
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.
-        self.people_in_elevator = [0, 0]    # Tuple: (summed number of people, count of up/down movements)
+        self.people_in_elevator_list = []   # List of all people in elevator of all (up/down) movements.
         self.list_impatient_persons = []    # List of people who took the stairs because they were too impatient.
 
         # Variables to store the results.
         self.mean_waiting_time = [-1]*nr_floors     # The mean waiting time per floor.
         self.sd_waiting_time = [-1]*nr_floors       # Tme standard deviation per floor.
         self.mean_people_in_elevator = -1           # The mean value of people in the elevator.
+        self.sd_people_in_elevator = -1             # The sd value of people in the elevator.
+        self.sd_people_in_elevator = -1             # The standard deviation of people in the elevator.
         self.prob_not_to_enter = [-1]*nr_floors     # The probability not being able to enter the elevator for floor i.
 
         # Overall variables.
@@ -87,9 +89,10 @@ class SimulateResults:
         ##########################################
         self.overall_sd_waiting_time = np.std(all_waiting_times)
 
-        # Calculate mean people in the elevator.
+        # Calculate mean and sd of people in the elevator.
         ##########################################
-        self.mean_people_in_elevator = self.people_in_elevator[0] / self.people_in_elevator[1]
+        self.mean_people_in_elevator = np.mean(self.people_in_elevator_list)
+        self.sd_people_in_elevator = np.std(self.people_in_elevator_list)
 
         # Calculate probability not being able to board an elevator.
         ##########################################
