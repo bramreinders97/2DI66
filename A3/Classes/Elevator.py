@@ -17,7 +17,7 @@ class Elevator:
         self.going_up = True
         self.people = []
 
-    def add_person(self, floor, current_time):
+    def add_person(self, floor, current_time, extension_6):
         """
         Have a person enter the elevator, if possible
         :return:
@@ -25,13 +25,25 @@ class Elevator:
         if self.going_up:
             if floor.up_queue:
                 tmp_person = floor.up_queue.pop(0)
-                tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
-                self.people.append(tmp_person)
+
+                # Check if the person took the stairs (only if extension 6 is active)
+                if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    return tmp_person
+                else:
+                    tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                    self.people.append(tmp_person)
+                    return False
         else:
             if floor.down_queue:
                 tmp_person = floor.down_queue.pop(0)
-                tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
-                self.people.append(tmp_person)
+
+                # Check if the person took the stairs (only if extension 6 is active)
+                if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    return tmp_person
+                else:
+                    tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                    self.people.append(tmp_person)
+                    return False
 
     def remove_person(self, current_time):
         """

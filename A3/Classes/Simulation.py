@@ -28,13 +28,15 @@ class Simulation:
         self.event_list = [] #list of events that still need to happen during simulation
         #types of events: enter elevator, leave elevator, elevator reaches a new floor, person arrives at queue
 
-    def simulate(self):
+    def simulate(self, extension_6=False):
         """
         Run a simulation with the given parameters
+
+        :param extension_6: Bool to activate the extension to answer question 6.
         :return:
         """
 
-        simulation_results = SimulateResults()
+        simulation_results = SimulateResults(extension_6)
 
         #add starting events: all elevators start to move & all floors schedule their first group arriving
         for elevator in self.elevators:
@@ -54,14 +56,16 @@ class Simulation:
             event = heapq.heappop(self.event_list)[1]
             self.t = event.t
 
-            #handle the events
-            new_event, additional_data = event.handle_event()
+            # handle the events
+            new_event, additional_data = event.handle_event(extension_6)
 
             # Collect the data
             if additional_data:
                 if 1 == event.event_type:  # Increment the sum of all persons in elevators.
                     simulation_results.people_in_elevator[0] += additional_data
                     simulation_results.people_in_elevator[1] += 1
+                elif 2 == event.event_type and additional_data:  # Save the person in the list of impatient persons.
+                    simulation_results.list_impatient_persons.append(additional_data)
                 elif 3 == event.event_type:  # Save the finished person in list
                     simulation_results.list_of_persons.append(additional_data)
 

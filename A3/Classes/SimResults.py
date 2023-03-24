@@ -2,17 +2,19 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, nr_floors=5):
+    def __init__(self, extension_6, nr_floors=5):
 
         """
         Class that keeps track of the important data and calculates the results.
 
+        :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
         """
 
         # Variables to store the data.
-        self.list_of_persons = []                   # List of all persons who finished.
-        self.people_in_elevator = [0, 0]            # Tuple: (summed number of people, count of up/down movements)
+        self.list_of_persons = []           # List of all persons who finished.
+        self.people_in_elevator = [0, 0]    # Tuple: (summed number of people, count of up/down movements)
+        self.list_impatient_persons = []    # List of people who took the stairs because they were too impatient.
 
         # Variables to store the results.
         self.mean_waiting_time = [-1]*nr_floors     # The mean waiting time per floor.
@@ -21,12 +23,25 @@ class SimulateResults:
 
         # Other variables
         self.nr_floors = nr_floors                  # The number of floors of the system. For computational reasons.
+        self.extension_6 = extension_6              # Bool. True if extension 6 is activated.
 
     def make_calculations(self):
 
         """
-        Method that does all the necessary calculations. This method needs to be executed in order to have correct
-        values in the variables used to store the results.
+        Method that decides which calculations need to be done and calls the corresponding method.
+        This method needs to be executed in order to have correct values in the variables used to store the results.
+        """
+
+        # Check whether extension 6 is activated.
+        if self.extension_6:
+            self.make_calculations_extension_6()
+        else:
+            self.make_calculations_normal()
+
+    def make_calculations_normal(self):
+
+        """
+        Method that does all the necessary calculations in the normal case (extension 6 not activated)
         """
 
         # Calculate mean waiting time.
@@ -49,12 +64,11 @@ class SimulateResults:
         self.mean_people_in_elevator = self.people_in_elevator[0] / self.people_in_elevator[1]
 
         # Calculate probability not being able to board an elevator.
-        # Comment: This is not compatible with extension 6.
         ##########################################
 
         # Define two lists to hold the total number of entry possibilities and occasions a person could not enter.
-        total_could_not_enter = [0]*self.nr_floors
-        total_possibilities = [0]*self.nr_floors
+        total_could_not_enter = [0] * self.nr_floors
+        total_possibilities = [0] * self.nr_floors
 
         # Sum over all persons and the count how often they were not able to enter an elevator.
         for person in self.list_of_persons:
@@ -65,6 +79,12 @@ class SimulateResults:
         # Divide the total number of times someone was not able to enter by the total number of people on that floor.
         for i in range(self.nr_floors):
             self.prob_not_to_enter[i] = total_could_not_enter[i] / total_possibilities[i]
+
+    def make_calculations_extension_6(self):
+
+        """
+        Method that does all the necessary calculations in the case that extension 6 is activated.
+        """
 
     def __str__(self):
 

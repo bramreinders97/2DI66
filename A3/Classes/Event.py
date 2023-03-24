@@ -21,7 +21,7 @@ class Event:
         self.floor = floor
         self.destination_floor = destination_floor
 
-    def handle_event(self):
+    def handle_event(self, extension_6):
         """
         Calls functions in respective classes to handle each type of event
         :return:
@@ -35,7 +35,7 @@ class Event:
             additional_data = len(self.elevator.people)
             temp_event = self.elevator.reach_floor(self.t, self.floor, self.destination_floor)
         elif self.event_type == 2:  # ENTER_ELEVATOR
-            self.elevator.add_person(self.floor, self.t)
+            additional_data = self.elevator.add_person(self.floor, self.t, extension_6)
             temp_event = self.elevator.schedule_next_event(self.t, self.floor)
         elif self.event_type == 3:  # LEAVE_ELEVATOR:
             additional_data = self.elevator.remove_person(self.t)
