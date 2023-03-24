@@ -119,6 +119,7 @@ class Answer:
         half_width = 1.96 * np.sqrt(sd_waiting_time**2 / n_runs)
         half_width_2 = 1.96 * np.sqrt(sd_waiting_time_2**2 / n_runs)
 
+        # print the result.
         print("results for question 6")
         print("elevators: " + str(elevators))
         print("#################################")
