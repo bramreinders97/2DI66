@@ -30,7 +30,7 @@ class Event:
         additional_data = False
 
         if self.event_type == 0:  # NEW_QUEUER
-            temp_event = self.floor.new_queuer(self.t)
+            temp_event = self.floor.new_queuer(self.t, extension_6)
         elif self.event_type == 1:  # ELEVATOR_ARRIVES
             additional_data = len(self.elevator.people)
             temp_event = self.elevator.reach_floor(self.t, self.floor, self.destination_floor)

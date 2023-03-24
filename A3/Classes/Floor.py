@@ -31,8 +31,8 @@ class Floor():
     def schedule_next_event(self, t):
         return Event(0, t+np.random.exponential(self.arrive_rate), floor = self)
 
-    def new_queuer(self, t):
+    def new_queuer(self, t, extension_6):
         #choose destination for person based on probs
         destination = np.random.choice([0,1,2,3,4], p = self.probs)
-        self.add_to_queue(Person(destination, t, self.floor_nr))
+        self.add_to_queue(Person(destination, t, self.floor_nr, extension_6))
         return self.schedule_next_event(t)
