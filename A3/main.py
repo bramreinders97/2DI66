@@ -1,10 +1,7 @@
 from A3.Classes.Simulation import Simulation
+from A3.Classes.Answer import Answer
 
 
-simulation = Simulation(10000, 1)
+answer = Answer()
 
-results = simulation.simulate(True)
-
-results.make_calculations()
-
-print(results)
+answer.question_6()
