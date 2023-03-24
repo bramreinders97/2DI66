@@ -49,7 +49,7 @@ class Answer:
         mean_waiting_time = np.mean(mean_waiting_times, 1)
         mean_waiting_time_2 = np.mean(mean_waiting_times_2, 1)
 
-        # Calculate mean standard diviatins.
+        # Calculate mean standard deviations.
 
 
 

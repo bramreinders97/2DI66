@@ -7,7 +7,7 @@ class SimulateResults:
 
         """
         Class that keeps track of the important data and calculates the results.
-        Attention: Only mean_waiting_time and mean_waiting_time_2 have meaning if extension 6 is activated.
+        Attention: Only the "overall" variables are defined if extension 6 is activated.
 
         :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
@@ -20,17 +20,20 @@ class SimulateResults:
 
         # Variables to store the results.
         self.mean_waiting_time = [-1]*nr_floors     # The mean waiting time per floor.
+        self.sd_waiting_time = [-1]*nr_floors       # Tme standard deviation per floor.
         self.mean_people_in_elevator = -1           # The mean value of people in the elevator.
         self.prob_not_to_enter = [-1]*nr_floors     # The probability not being able to enter the elevator for floor i.
 
+        # Overall variables.
         self.overall_mean_waiting_time = -1     # The overall mean waiting time over all floors.
+        self.overall_sd_waiting_time = -1       # The overall standard deviation over all floors.
         self.overall_mean_waiting_time_2 = -1   # The overall mean waiting time including people left due to impatience.
+        self.overall_sd_waiting_time_2 = -1     # The overall sd waiting time including people left due to impatience.
 
         # Other variables
         self.nr_floors = nr_floors                  # The number of floors of the system. For computational reasons.
         self.extension_6 = extension_6              # Bool. True if extension 6 is activated.
         self.make_calculations_executed = False     # Checks whether the method make_calculations was already executed.
-
 
     def make_calculations(self):
 
@@ -57,21 +60,32 @@ class SimulateResults:
         # Calculate mean waiting time.
         ##########################################
 
-        # Define two lists to hold the total numer of people and total waiting time on each floor.
-        total_waiting_time = [0] * self.nr_floors
-        total_people_on_floor = [0] * self.nr_floors
+        # Define 2D-list of all waiting times and floors.
+        waiting_times = [[] for i in range(self.nr_floors)]
 
-        # Do the calculations using a for loop and a division.
+        # Sum over all finished persons
         for person in self.list_of_persons:
-            total_waiting_time[person.floor_nr] += person.enter_elevator - person.start_time
-            total_people_on_floor[person.floor_nr] += 1
+            tmp_waiting_time = person.enter_elevator - person.start_time
+            waiting_times[person.floor_nr].append(tmp_waiting_time)
 
         for i in range(self.nr_floors):
-            self.mean_waiting_time[i] = total_waiting_time[i] / total_people_on_floor[i]
+            self.mean_waiting_time[i] = np.mean(waiting_times[i])
+
+        # Calculate standard deviation of the waiting times per floor
+        ##########################################
+        for i in range(self.nr_floors):
+            self.sd_waiting_time[i] = np.std(waiting_times[i])
 
         # Calculate mean waiting time over all floors.
         ##########################################
-        self.overall_mean_waiting_time = np.sum(total_waiting_time) / np.sum(total_people_on_floor)
+        all_waiting_times = []
+        for i in range(len(waiting_times)):
+            all_waiting_times += waiting_times[i]
+        self.overall_mean_waiting_time = np.mean(all_waiting_times)
+
+        # Calculate sd of the waiting times over all floors.
+        ##########################################
+        self.overall_sd_waiting_time = np.std(all_waiting_times)
 
         # Calculate mean people in the elevator.
         ##########################################
@@ -100,28 +114,24 @@ class SimulateResults:
         Method that does all the necessary calculations in the case that extension 6 is activated.
         """
 
-        # Calculate mean waiting time.
-        ##########################################
+        # Define 2D-list of all waiting times and floors.
+        waiting_times = []
 
-        # Define two lists to hold the total numer of people and total waiting time on each floor.
-        total_waiting_time = 0
-        total_people_on_floor = 0
-
-        # Sum over all persons who were able to enter the elevator.
+        # Sum over all finished persons
         for person in self.list_of_persons:
-            total_waiting_time += person.enter_elevator - person.start_time
-            total_people_on_floor += 1
+            tmp_waiting_time = person.enter_elevator - person.start_time
+            waiting_times.append(tmp_waiting_time)
 
-        # Calculate the mean.
-        self.overall_mean_waiting_time = total_waiting_time / total_people_on_floor
+        self.overall_mean_waiting_time = np.mean(waiting_times)
+        self.overall_sd_waiting_time = np.std(waiting_times)
 
-        # Sum over all persons who took the stairs because of impatience and add them.
+        # Sum over all finished persons
         for person in self.list_impatient_persons:
-            total_waiting_time += person.impatience
-            total_people_on_floor += 1
+            tmp_waiting_time = person.impatience
+            waiting_times.append(tmp_waiting_time)
 
-        # Calculate the mean.
-        self.overall_mean_waiting_time_2 = total_waiting_time / total_people_on_floor
+        self.overall_mean_waiting_time_2 = np.mean(waiting_times)
+        self.overall_sd_waiting_time_2 = np.std(waiting_times)
 
     def __str__(self):
 
