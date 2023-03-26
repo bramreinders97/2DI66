@@ -63,8 +63,32 @@ class Answer:
         print("half widths matrix")
         print(hw_per_elevator_and_floor)
 
-    def question_4(self):
-        pass
+    def question_4(self, n_runs, sim_time):
+        """
+                Method to answer question 3.
+
+                :param n_runs:      The number of simulations
+                :param sim_time:    The time each simulation runs, seconds.
+        """
+
+        chance_per_nr_elevators = []
+        for nr_elevators in range(1,11):
+            chances = []
+            nr_people = []
+            for i in range(n_runs):
+                simulation = Simulation(sim_time, nr_elevators)
+                results = simulation.simulate()
+                results.make_calculations()
+                chances.append(results.chance_over_5_min_wait)
+                nr_people.append(len(results.list_of_persons))
+            #weight each result by the amount of people in the related simulation
+            chance = 0
+            for i in range(len(chances)):
+                chance += chances[i]*nr_people[i]/sum(nr_people)
+            chance_per_nr_elevators.append(chance)
+
+        print("Q4: chance to wait long per nr of elevators:")
+        print([str(i) + ":" + str(chance_per_nr_elevators[i]) + "\n" for i in range(len(chance_per_nr_elevators))])
 
     def question_5(self):
         pass

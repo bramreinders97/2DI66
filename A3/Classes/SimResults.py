@@ -37,6 +37,10 @@ class SimulateResults:
         self.extension_6 = extension_6              # Bool. True if extension 6 is activated.
         self.make_calculations_executed = False     # Checks whether the method make_calculations was already executed.
 
+        #variable for question 4
+        self.chance_over_5_min_wait = None
+
+
     def make_calculations(self):
 
         """
@@ -102,10 +106,17 @@ class SimulateResults:
         total_possibilities = [0] * self.nr_floors
 
         # Sum over all persons and the count how often they were not able to enter an elevator.
+        count_wait_over_5_min = 0
         for person in self.list_of_persons:
             total_could_not_enter[person.floor_nr] += person.could_not_enter_count
             # +1 because everybody was able to enter eventually.
             total_possibilities[person.floor_nr] += person.could_not_enter_count + 1
+
+            #check how many waited over 5 minutes
+            if person.start_time + 300 < person.enter_elevator:
+                count_wait_over_5_min += 1
+        #calculate fraction of people waiting over 5 minutes
+        self.chance_over_5_min_wait = count_wait_over_5_min/len(self.list_of_persons)
 
         # Divide the total number of times someone was not able to enter by the total number of people on that floor.
         for i in range(self.nr_floors):
@@ -164,6 +175,8 @@ class SimulateResults:
 
             for i in range(self.nr_floors):
                 tmp_str += "Floor " + str(i) + ": " + str(np.round(self.prob_not_to_enter[i], 3)) + "\n"
+
+            tmp_str += f"chance to wait over 5 minutes for an elevator: {self.chance_over_5_min_wait:.4f}"
 
             tmp_str += "##################################\n"
 
