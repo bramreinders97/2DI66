@@ -31,7 +31,7 @@ class Elevator:
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                    tmp_person.enter_elevator = current_time
                     self.people.append(tmp_person)
                     return False
         else:
@@ -42,7 +42,7 @@ class Elevator:
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time+1  # +1 because he needs one second to enter the elevator.
+                    tmp_person.enter_elevator = current_time
                     self.people.append(tmp_person)
                     return False
 

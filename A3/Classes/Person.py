@@ -29,8 +29,8 @@ class Person():
             self.impatience = -1
 
         # Variables in order to collect the data
-        self.enter_elevator = -1        # The time the person enters the elevator. (starting time + waiting + entering)
-        self.leave_elevator = -1        # The time the person leaves the elevator. (... + traveling + exiting)
+        self.enter_elevator = -1        # The time the person enters the elevator. (starting time + waiting)
+        self.leave_elevator = -1        # The time the person leaves the elevator. (... entering + traveling + exiting)
 
         self.floor_nr = floor_nr        # The floor number where the person enters the elevator.
         self.could_not_enter_count = 0  # Counts how often a person could not enter.
