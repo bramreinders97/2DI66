@@ -15,13 +15,13 @@ class Answer:
     def question_2(self):
         pass
 
-    def question_3(self, n_runs=10000, sim_time=8*60, elevators=[1, 2, 3, 4, 5], n_floors=5):
+    def question_3(self, n_runs=10000, sim_time=8*60*60, elevators=[1, 2, 3, 4, 5], n_floors=5):
 
         """
         Method to answer question 3.
 
         :param n_runs:      The number of simulations
-        :param sim_time:    The time each simulation runs.
+        :param sim_time:    The time each simulation runs, seconds.
         :param elevators:   List of values for the total number of elevators the system has.
         :param n_floors:    The number of floors of the system. (always 5 in our case)
         """
