@@ -22,7 +22,7 @@ class Answer:
             for j in range(len(elevators)):
                 simulation = Simulation(time, elevators[j])
                 results = simulation.simulate(False, 0)
-                results.make_calculations()
+                results.make_calculations(0)
                 m[j].append(results.overall_mean_waiting_time)
 
         for j in range(len(elevators)):
