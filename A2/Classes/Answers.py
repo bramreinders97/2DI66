@@ -164,6 +164,7 @@ class Answers:
             mean_queue_time_slow = []
             sd_queue_time_slow = []
 
+            # Simulate n sub simulations.
             for i in range(n):
                 simulation = Simulation([1, 1.25, 1], 0, True, lam / 60)
                 sim = simulation.simulate()
@@ -178,6 +179,8 @@ class Answers:
                 if i % 1000 == 0:
                     print("\r Simulation: " + str(i) + "/" + str(n), end="")
 
+            # Print everything in a nice way.
+            ############
             print()
             print("lambda: " + str(lam))
             mean_fast = np.mean(mean_queue_time_fast)
@@ -221,6 +224,7 @@ class Answers:
             mean_sojourn_time_15 = []
             sd_sojourn_time_15 = []
 
+            # Simulate n sub simulations
             for i in range(n):
 
                 # Simulate without chance that a group chooses the mobile food stand
@@ -243,6 +247,8 @@ class Answers:
                 if i % 1000 == 0:
                     print("\r Simulation: " + str(i) + "/" + str(n), end="")
 
+            # Print everything in a nice way.
+            ############
             print()
             print("--------------------------------------")
             print("lambda: " + str(lam))
