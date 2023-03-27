@@ -32,9 +32,7 @@ class Answer:
         for i in range(n_runs):
 
             # Display how far the simulation is.
-            if i % 100 == 0:
-                print("\r Game: " + str(i) + "/" + str(n_runs), end="")
-            print()
+            print("\r Game: " + str(i) + "/" + str(n_runs), end="")
 
             # Iterate over different numbers of elevators
             for j in range(len(elevators)):
@@ -45,6 +43,8 @@ class Answer:
 
                 for m in range(n_floors):
                     prob_not_to_enter[j][m][i] = results.prob_not_to_enter[m]
+
+        #print("Hello")
 
         # Calculate the mean, standard deviation and half width.
         mean_per_elevator_and_floor = np.zeros((len(elevators), n_floors))
@@ -57,11 +57,13 @@ class Answer:
                 hw_per_elevator_and_floor[i][j] = 1.96 * np.sqrt(sd_per_elevator_and_floor[i][j] ** 2 / n_runs)
 
         # print the results
+        print()
+        print()
         print("probabilities matrix")
-        print(mean_per_elevator_and_floor)
+        print(np.round(mean_per_elevator_and_floor, 3))
         print()
         print("half widths matrix")
-        print(hw_per_elevator_and_floor)
+        print(np.round(hw_per_elevator_and_floor, 3))
 
     def question_4(self, n_runs, sim_time):
         """
@@ -93,7 +95,7 @@ class Answer:
     def question_5(self):
         pass
 
-    def question_6(self, n_runs=10000, sim_time=8*60, elevators=[1, 2, 3, 4, 5]):
+    def question_6(self, n_runs=100, sim_time=8*60*60, elevators=[1, 2, 3, 4, 5]):
 
         """
         Method to answer question 6.
@@ -114,7 +116,7 @@ class Answer:
         for i in range(n_runs):
 
             # Display how far the simulation is.
-            if i % 100 == 0:
+            if i % 10 == 0:
                 print("\r Game: " + str(i) + "/" + str(n_runs), end="")
 
             # Iterate over different numbers of elevators
@@ -144,6 +146,8 @@ class Answer:
         half_width_2 = 1.96 * np.sqrt(sd_waiting_time_2**2 / n_runs)
 
         # print the results.
+        print()
+        print()
         print("results for question 6")
         print("elevators: " + str(elevators))
         print("#################################")

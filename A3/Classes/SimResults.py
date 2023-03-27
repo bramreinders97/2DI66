@@ -3,7 +3,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, extension_6, nr_floors=5):
+    def __init__(self, extension_6, nr_floors=5, warm_up=60*60):
 
         """
         Class that keeps track of the important data and calculates the results.
@@ -12,6 +12,9 @@ class SimulateResults:
         :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
         """
+
+        # Variable to control the data collection
+        self.warm_up = warm_up      # The time after which peoples data is collected (warm up time)
 
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.
@@ -40,6 +43,15 @@ class SimulateResults:
         #variable for question 4
         self.chance_over_5_min_wait = None
 
+    def add_to_list_of_persons(self, person, time):
+
+        if time > self.warm_up:
+            self.list_of_persons.append(person)
+
+    def add_to_list_impatient_persons(self, person, time):
+
+        if time > self.warm_up:
+            self.list_impatient_persons.append(person)
 
     def make_calculations(self):
 
@@ -178,7 +190,7 @@ class SimulateResults:
 
             tmp_str += f"chance to wait over 5 minutes for an elevator: {self.chance_over_5_min_wait:.4f}"
 
-            tmp_str += "##################################\n"
+            tmp_str += "\n##################################\n"
 
         else:
             tmp_str += "\nresults\n##################################\n"
