@@ -3,7 +3,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, extension_6, warm_up, nr_floors=5):
+    def __init__(self, extension_6, nr_floors=5):
         """
         Class that keeps track of the important data and calculates the results.
         Attention: Only the "overall" variables are defined if extension 6 is activated.
@@ -14,7 +14,7 @@ class SimulateResults:
 
         # Variable to control the data collection
         # The time after which peoples data is collected (warm up time)
-        self.warm_up = warm_up
+        self.cut_off = -1
 
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.
@@ -58,36 +58,27 @@ class SimulateResults:
         # variable for question 4
         self.chance_over_5_min_wait = None
 
-    def add_to_list_of_persons(self, person, time):
-        """
-        Method that adds a person to the list of finished persons.
-
-        :param person:  The person that is to be added.
-        :param time:    The time after which the person should be saved. (warm up time)
-        """
-
-        if time > self.warm_up:
-            self.list_of_persons.append(person)
-
-    def add_to_list_impatient_persons(self, person, time):
-        """
-        Method that adds a person to the list of persons who took the stairs because of impatience.
-
-        :param person:  The person that is to be added.
-        :param time:    The time after which the person should be saved. (warm up time)
-        """
-
-        if time > self.warm_up:
-            self.list_impatient_persons.append(person)
-
-    def make_calculations(self):
+    def make_calculations(self, cut_off=2028):
         """
         Method that decides which calculations need to be done and calls the corresponding method.
         This method needs to be executed in order to have correct values in the variables used to store the results.
         """
 
+        if self.make_calculations_executed:
+            print(
+                "make_calculations already executed. This may lead to unwanted behaviour")
+
         # Switch make_calculations_executed to True.
         self.make_calculations_executed = True
+
+        # Save how many people where cut off
+        self.cut_off = cut_off
+        # Cut of the first x persons.
+        self.list_of_persons = self.list_of_persons[cut_off:]
+
+        if len(self.list_of_persons) < 1:
+            print("no persons in self.list_of_persons the simulation is not long enough or the cut off is to large")
+            return
 
         # Check whether extension 6 is activated.
         if self.extension_6:
