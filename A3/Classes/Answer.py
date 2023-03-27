@@ -132,8 +132,31 @@ class Answer:
     def question_1(self):
         pass
 
-    def question_2(self):
-        pass
+    def question_2(self, n_runs, sim_time):
+        """
+                Method to answer question 2.
+
+                :param n_runs:      The number of simulations
+                :param sim_time:    The time each simulation runs, seconds.
+        """
+        nr_people = []
+        conf_interval_nr_people = []
+        for nr_elevators in range(1,5):
+            this_elevator = []
+            for i in range(n_runs):
+                simulation = Simulation(sim_time, nr_elevators)
+                results = simulation.simulate()
+                results.make_calculations()
+                this_elevator.append(results.mean_people_in_elevator)
+            #summarize results for this elevator
+            nr_people.append(sum(this_elevator)/n_runs)
+            sd = sum([(i-nr_people[-1])**2 for i in this_elevator])/n_runs
+            conf_interval_nr_people.append([sd+nr_people[-1], nr_people[-1]-sd])
+        print("Results question 2:")
+        for i in range(len(nr_people)):
+            print(f"{i+1} Elevators: mean {nr_people[i]}, {conf_interval_nr_people[i]}")
+
+
 
     def question_3(self, n_runs=10000, sim_time=8*60*60, elevators=[1, 2, 3, 4, 5], n_floors=5):
         """
@@ -189,7 +212,7 @@ class Answer:
 
     def question_4(self, n_runs, sim_time):
         """
-                Method to answer question 3.
+                Method to answer question 4.
 
                 :param n_runs:      The number of simulations
                 :param sim_time:    The time each simulation runs, seconds.
@@ -215,9 +238,9 @@ class Answer:
         print([str(i) + ":" + str(chance_per_nr_elevators[i]) +
               "\n" for i in range(len(chance_per_nr_elevators))])
 
-    def question_5(self):
+    def question_5(self, n_runs, sim_time):
         """
-                        Method to answer question 3.
+                        Method to answer question 5.
 
                         :param n_runs:      The number of simulations
                         :param sim_time:    The time each simulation runs, seconds.
