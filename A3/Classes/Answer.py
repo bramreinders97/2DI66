@@ -91,6 +91,13 @@ class Answer:
         print([str(i) + ":" + str(chance_per_nr_elevators[i]) + "\n" for i in range(len(chance_per_nr_elevators))])
 
     def question_5(self):
+        """
+                        Method to answer question 3.
+
+                        :param n_runs:      The number of simulations
+                        :param sim_time:    The time each simulation runs, seconds.
+        """
+        #copy-paste code Q1 but with extension_5 = true for the simulation calls
         pass
 
     def question_6(self, n_runs=10000, sim_time=8*60, elevators=[1, 2, 3, 4, 5]):
