@@ -45,10 +45,24 @@ class SimulateResults:
 
     def add_to_list_of_persons(self, person, time):
 
+        """
+        Method that adds a person to the list of finished persons.
+
+        :param person:  The person that is to be added.
+        :param time:    The time after which the person should be saved. (warm up time)
+        """
+
         if time > self.warm_up:
             self.list_of_persons.append(person)
 
     def add_to_list_impatient_persons(self, person, time):
+
+        """
+        Method that adds a person to the list of persons who took the stairs because of impatience.
+
+        :param person:  The person that is to be added.
+        :param time:    The time after which the person should be saved. (warm up time)
+        """
 
         if time > self.warm_up:
             self.list_impatient_persons.append(person)
