@@ -3,7 +3,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, extension_6, nr_floors=5):
+    def __init__(self, extension_6, warm_up, nr_floors=5):
         """
         Class that keeps track of the important data and calculates the results.
         Attention: Only the "overall" variables are defined if extension 6 is activated.
@@ -11,6 +11,10 @@ class SimulateResults:
         :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
         """
+
+        # Variable to control the data collection
+        # The time after which peoples data is collected (warm up time)
+        self.warm_up = warm_up
 
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.
@@ -53,6 +57,28 @@ class SimulateResults:
 
         # variable for question 4
         self.chance_over_5_min_wait = None
+
+    def add_to_list_of_persons(self, person, time):
+        """
+        Method that adds a person to the list of finished persons.
+
+        :param person:  The person that is to be added.
+        :param time:    The time after which the person should be saved. (warm up time)
+        """
+
+        if time > self.warm_up:
+            self.list_of_persons.append(person)
+
+    def add_to_list_impatient_persons(self, person, time):
+        """
+        Method that adds a person to the list of persons who took the stairs because of impatience.
+
+        :param person:  The person that is to be added.
+        :param time:    The time after which the person should be saved. (warm up time)
+        """
+
+        if time > self.warm_up:
+            self.list_impatient_persons.append(person)
 
     def make_calculations(self):
         """
@@ -203,7 +229,7 @@ class SimulateResults:
 
             tmp_str += f"chance to wait over 5 minutes for an elevator: {self.chance_over_5_min_wait:.4f}"
 
-            tmp_str += "##################################\n"
+            tmp_str += "\n##################################\n"
 
         else:
             tmp_str += "\nresults\n##################################\n"
