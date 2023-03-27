@@ -3,7 +3,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, extension_6, nr_floors=5, warm_up=60*60):
+    def __init__(self, extension_6, warm_up, nr_floors=5):
 
         """
         Class that keeps track of the important data and calculates the results.

@@ -116,8 +116,7 @@ class Answer:
         for i in range(n_runs):
 
             # Display how far the simulation is.
-            if i % 10 == 0:
-                print("\r Game: " + str(i) + "/" + str(n_runs), end="")
+            print("\r Game: " + str(i) + "/" + str(n_runs), end="")
 
             # Iterate over different numbers of elevators
             for j in range(len(elevators)):

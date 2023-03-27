@@ -28,7 +28,7 @@ class Simulation:
         self.event_list = [] #list of events that still need to happen during simulation
         #types of events: enter elevator, leave elevator, elevator reaches a new floor, person arrives at queue
 
-    def simulate(self, extension_6=False):
+    def simulate(self, extension_6=False, warm_up=60*60):
         """
         Run a simulation with the given parameters
 
@@ -36,7 +36,7 @@ class Simulation:
         :return:
         """
 
-        simulation_results = SimulateResults(extension_6)
+        simulation_results = SimulateResults(extension_6, warm_up)
 
         #add starting events: all elevators start to move & all floors schedule their first group arriving
         for elevator in self.elevators:
