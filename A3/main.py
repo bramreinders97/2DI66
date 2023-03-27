@@ -4,9 +4,8 @@ from A3.Classes.Answer import Answer
 
 answer = Answer()
 
-answer.question_6()
+answer.steady_state_reached()
 
-#simulation = Simulation(10000, 1)
 #results = simulation.simulate(False)
 #results.make_calculations()
 #print(results)

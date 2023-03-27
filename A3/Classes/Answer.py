@@ -1,6 +1,7 @@
 from A3.Classes.Simulation import Simulation
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Answer:
@@ -8,6 +9,29 @@ class Answer:
     """
     Class to answer the questions of the assignments.
     """
+
+    def steady_state_reached(self, runs = 15, elevators = [1, 3, 5, 7]):
+        m = [[] for i in range(len(elevators))]
+        x_axis = []
+
+        for i in range(1, runs + 1):
+            print("\r Game: " + str(i) + "/" + str(runs), end="")
+            time = i * 1000
+            x_axis.append(time)
+
+            for j in range(len(elevators)):
+                simulation = Simulation(time, elevators[j])
+                results = simulation.simulate(False, 0)
+                results.make_calculations()
+                m[j].append(results.overall_mean_waiting_time)
+
+        for j in range(len(elevators)):
+            plt.plot(x_axis, m[j], label="number of elevators: " + str(elevators[j]))
+        plt.xlabel("simulation duration in seconds")
+        plt.ylabel("mean waiting time")
+        plt.legend()
+        plt.show()
+        plt.close()
 
     def question_1(self):
         pass
