@@ -32,6 +32,9 @@ class SimulateResults:
         self.n_people_fast = 0
         self.n_people_slow = 0
 
+        # extra info Q2
+        self.all_times_groups = deque()
+
     def registerDeparture(self, customer, slow_cashier=False):
         """
         Register all relevant information corresponding to the departure of a customer
@@ -56,6 +59,9 @@ class SimulateResults:
             self.sumQTime2 += queue_time**2
             self.n_people_fast += 1
 
+        # extra info Q2
+        self.all_times_groups[customer.group_index].append(sojourn_time)
+
     def registerNPeopleCanteen(self, time, n_people):
         """
         Update the histogram keeping track of the number of people present in the canteen 
@@ -66,11 +72,14 @@ class SimulateResults:
         self.nPeopleHistogram[min(
             n_people, self.MAX_PEOPLE_IN_CANTEEN)] += time
 
-        #print(self.nPeopleHistogram[:6])
+        # print(self.nPeopleHistogram[:6])
 
     def registerGroupArrival(self):
         # New group has arrived -> Append a new entry to the deque keeping track of sojourn time for groups
         self.SojournGroups.append(0)
+
+        # for extra info Q2
+        self.all_times_groups.append(deque())
 
     def getMeanSojournTime(self):
         # Return the Expected Sojourn time of a customer
@@ -115,6 +124,19 @@ class SimulateResults:
         # Return th st deviation of the sojourn time of a group.
         return np.std(self.SojournGroups)
 
+    def getExtraInfoQ2(self):
+        max_sojourns = np.zeros(len(self.all_times_groups))
+        st_dev_sojourns = np.zeros(len(self.all_times_groups))
+
+        for i, deque in enumerate(self.all_times_groups):
+            max_sojourns[i] = np.max(deque)
+            st_dev_sojourns[i] = np.std(deque)
+
+        return {
+            'mean': np.mean(max_sojourns),
+            'stDev': np.mean(st_dev_sojourns)
+        }
+
     def plotHist(self, maxPeople=50):
         """ 
         Plot the histogram showing the probability having k people in the canteen at once.
@@ -132,6 +154,9 @@ class SimulateResults:
         plt.show()
 
     def __str__(self):
+
+        extra_info = self.getExtraInfoQ2()
+
         if self.ext_1:
             return f"""
             Mean Queue time Fast = {self.getMeanQueueTime()}
@@ -155,6 +180,10 @@ class SimulateResults:
             Q2:
             Mean Sojourn time groups = {self.getMeanSojournGroup()}
             StDev Sojourn time groups = {self.getStDevSojournGroup()}
+
+            --- extra info Q2 ---
+            Mean Sojourn Group = {extra_info['mean']}
+            St Dev Inside Groups = {extra_info['stDev']}
 
             {40 * '-'}
 

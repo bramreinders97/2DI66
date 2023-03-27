@@ -1,12 +1,6 @@
-from A3.Classes.Simulation import Simulation
 from A3.Classes.Answer import Answer
 
+ans = Answer()
 
-answer = Answer()
-
-answer.question_3(10)
-
-#simulation = Simulation(10000, 1)
-#results = simulation.simulate(False)
-#results.make_calculations()
-#print(results)
+ans.warm_up_cut_off(n_elevators=8, T=60*60*8,
+                    n_runs=10000, modulo_for_printing=8)

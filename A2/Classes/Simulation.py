@@ -1,15 +1,19 @@
 from A2.Classes.Event import Event
 from A2.Classes.Queues import Queues
 from A2.Classes.SimResults import SimulateResults
+from A2.Classes.SimResults import SimulateResults
 import heapq
 
 
 class Simulation:
 
-    def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False, lam = 1/60):
+    def __init__(self, queue_speeds=[1, 1, 1], mobile_store=0, card_only=False, lam=1/60):
         """
         Class that does one singe simulation.
 
+        :param queue_speeds:   array.   Determines how many queses there are (length of the array)
+                                        1 => Cashier works at 100% speed. Set one value to 1.25 for extension 1
+                                        and how fast they are (values of the array entries)
         :param queue_speeds:   array.   Determines how many queses there are (length of the array)
                                         1 => Cashier works at 100% speed. Set one value to 1.25 for extension 1
                                         and how fast they are (values of the array entries)
@@ -38,11 +42,15 @@ class Simulation:
 
         # Keep track of the number of customers in the canteen at all times
         self.n_people_in_canteen = 0
+        # Keep track of the number of customers in the canteen at all times
+        self.n_people_in_canteen = 0
 
     def simulate(self):
         """
         Carries out one single simulation.
         """
+        # Create object to keep track of results
+        results = SimulateResults(ext_1=bool(sum(self.queue_speeds) > 3))
         # Create object to keep track of results
         results = SimulateResults(ext_1=bool(sum(self.queue_speeds) > 3))
 
@@ -61,9 +69,9 @@ class Simulation:
         # This choice is made such that we can let every customer who is still in the canteen
         # at t=3600 leave before calculating the results
         while self.event_list:
-
             # get next element from the event list
             event = heapq.heappop(self.event_list)[1]
+            prev_time = self.t
             prev_time = self.t
             self.t = event.t
 
@@ -123,7 +131,8 @@ class Simulation:
                 print("ERROR: in simulate: unknown event type")
                 break
         #print("last group:", self.next_group_id-1)
-        results.group_count = self.next_group_id #added to be able to check if group count makes sense
+        # added to be able to check if group count makes sense
+        results.group_count = self.next_group_id
         return results
 
     def schedule_events(self, events):

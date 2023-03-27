@@ -28,7 +28,7 @@ class Simulation:
         self.event_list = [] #list of events that still need to happen during simulation
         #types of events: enter elevator, leave elevator, elevator reaches a new floor, person arrives at queue
 
-    def simulate(self, extension_6=False):
+    def simulate(self, extension_6=False, warm_up=60*60):
         """
         Run a simulation with the given parameters
 
@@ -64,8 +64,10 @@ class Simulation:
                 if 1 == event.event_type:  # Increment the sum of all persons in elevators.
                     simulation_results.people_in_elevator_list.append(additional_data)
                 elif 2 == event.event_type and additional_data:  # Save the person in the list of impatient persons.
+                    #simulation_results.add_to_list_impatient_persons(additional_data, self.t)
                     simulation_results.list_impatient_persons.append(additional_data)
                 elif 3 == event.event_type:  # Save the finished person in list
+                    #simulation_results.add_to_list_of_persons(additional_data, self.t)
                     simulation_results.list_of_persons.append(additional_data)
 
             if new_event.event_type == 1:

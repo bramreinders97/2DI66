@@ -20,8 +20,6 @@ class Answers:
         def sd(my_list, mean):
             return math.sqrt(sum([(i - mean) ** 2 for i in my_list]) / len(my_list))
 
-
-
         start = time()
         for lam in range(1, 5):
             EW_list = []
@@ -53,8 +51,6 @@ class Answers:
                 ESg_sd_list.append(results.getStDevSojournGroup())
                 # nr of groups in total
                 group_count_list.append(results.group_count)
-
-
 
             # calculate standard deviations and means of the lists
             EW_mean = sum(EW_list) / len(EW_list)
@@ -294,6 +290,7 @@ class Answers:
         sim_2(n_simulations, 2)
         sim_2(n_simulations, 3)
         sim_2(n_simulations, 4)
+
     def extension_3(self, n_simulations):
         """
         Gets the mean sojourn and waiting time using card only mode
@@ -304,7 +301,8 @@ class Answers:
             mean_waiting_list = []
             mean_sojourn_list = []
             for i in range(n_simulations):
-                simulator = Simulation(queue_speeds=[1, 1, 1], lam=lam / 60, card_only=True)
+                simulator = Simulation(
+                    queue_speeds=[1, 1, 1], lam=lam / 60, card_only=True)
                 results = simulator.simulate()
 
                 mean_waiting_list.append(results.getMeanQueueTime())
@@ -315,4 +313,3 @@ class Answers:
                     Mean sojourn time: {sum(mean_sojourn_list)/len(mean_sojourn_list):.2f}
                     runtime: {time() - start:.2f}
                     """)
-

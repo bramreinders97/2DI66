@@ -44,13 +44,15 @@ class Event:
         # Get the arrival time of the next group
         if not mobile_store:
 
-            time_till_next_arrival = next_group_arriving(lam)#30        # The time until the next group arrives
+            # 30        # The time until the next group arrives
+            time_till_next_arrival = next_group_arriving(lam)
         else:
             time_till_next_arrival = 0
             # Iterate as long as one group does not choose the mobile store.
             while True:
 
-                time_till_next_arrival += next_group_arriving(lam)    # The time until the next group arrives
+                # The time until the next group arrives
+                time_till_next_arrival += next_group_arriving(lam)
                 tmp = random.random()
                 if tmp > mobile_store:
                     break
