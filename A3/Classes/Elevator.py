@@ -29,6 +29,7 @@ class Elevator:
 
                 # Check if the person took the stairs (only if extension 6 is active)
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    tmp_person.took_stairs = True
                     return tmp_person
                 else:
                     tmp_person.enter_elevator = current_time
@@ -40,6 +41,7 @@ class Elevator:
 
                 # Check if the person took the stairs (only if extension 6 is active)
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    tmp_person.took_stairs = True
                     return tmp_person
                 else:
                     tmp_person.enter_elevator = current_time
