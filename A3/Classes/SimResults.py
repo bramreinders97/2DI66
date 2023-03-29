@@ -77,7 +77,7 @@ class SimulateResults:
         # Switch make_calculations_executed to True.
         self.make_calculations_executed = True
 
-        # Save how many people where cut off
+        # Save how many people were cut off
         self.cut_off = cut_off
         # Cut of the first x persons.
         self.list_of_persons = self.list_of_persons[cut_off:]

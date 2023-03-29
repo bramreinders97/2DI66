@@ -12,7 +12,7 @@ start_time = time()
 
 # ans.warm_up_cut_off(n_elevators=8, T=60*60*8,
 #                     n_runs=10000, modulo_for_printing=8)
-ans.question_4(10,40000)
+ans.question_2(10,40000)
 
 print(time()-start_time)
 
