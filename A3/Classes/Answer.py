@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing
 from joblib import Parallel, delayed
+from time import time
 
 
 class Answer:
@@ -139,6 +140,7 @@ class Answer:
                 :param n_runs:      The number of simulations
                 :param sim_time:    The time each simulation runs, seconds.
         """
+        start_time = time()
         nr_people = []
         conf_interval_nr_people = []
         for nr_elevators in range(1,5):
@@ -151,7 +153,10 @@ class Answer:
             #summarize results for this elevator
             nr_people.append(sum(this_elevator)/n_runs)
             sd = sum([(i-nr_people[-1])**2 for i in this_elevator])/n_runs
-            conf_interval_nr_people.append([sd+nr_people[-1], nr_people[-1]-sd])
+            sd1 = sd*1.96/(n_runs**0.5)
+            conf_interval_nr_people.append([nr_people[-1]+sd1, nr_people[-1]-sd1])
+            print(f"Elevator {nr_elevators} completed after {time()-start_time}")
+
         print("Results question 2:")
         for i in range(len(nr_people)):
             print(f"{i+1} Elevators: mean {nr_people[i]}, {conf_interval_nr_people[i]}")
