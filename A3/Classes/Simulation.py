@@ -65,7 +65,7 @@ class Simulation:
                     simulation_results.people_in_elevator_list.append(additional_data)
                 elif 2 == event.event_type and additional_data:  # Save the person in the list of impatient persons.
                     #simulation_results.add_to_list_impatient_persons(additional_data, self.t)
-                    simulation_results.list_impatient_persons.append(additional_data)
+                    simulation_results.list_of_persons.append(additional_data)
                 elif 3 == event.event_type:  # Save the finished person in list
                     #simulation_results.add_to_list_of_persons(additional_data, self.t)
                     simulation_results.list_of_persons.append(additional_data)
