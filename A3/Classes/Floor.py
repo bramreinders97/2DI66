@@ -12,7 +12,7 @@ class Floor():
         """
 
         self.probs = probs
-        self.arrive_rate = arrive_rate
+        self.arrive_rate = arrive_rate/60 #convert to seconds
         self.floor_nr = floor_nr
         self.up_queue = []
         self.down_queue = []
@@ -34,7 +34,7 @@ class Floor():
             self.up_queue.append(person)
 
     def schedule_next_event(self, t):
-        return Event(0, t+np.random.exponential(self.arrive_rate), floor = self)
+        return Event(0, t+np.random.exponential(1/self.arrive_rate), floor = self)
 
     def new_queuer(self, t, extension_6):
         #choose destination for person based on probs

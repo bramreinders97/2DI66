@@ -155,7 +155,9 @@ class Answer:
             sd = sum([(i-nr_people[-1])**2 for i in this_elevator])/n_runs
             sd1 = sd*1.96/(n_runs**0.5)
             conf_interval_nr_people.append([nr_people[-1]+sd1, nr_people[-1]-sd1])
-            print(f"Elevator {nr_elevators} completed after {time()-start_time}")
+            print(f"Elevator {nr_elevators} completed after {time()-start_time}, nr people in sim {len(results.list_of_persons)}")
+            x = [(len(i.up_queue), len(i.down_queue)) for i in simulation.floors]
+            print(f"people in queues: {x} ")
 
         print("Results question 2:")
         for i in range(len(nr_people)):
