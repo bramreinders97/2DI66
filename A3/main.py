@@ -1,6 +1,7 @@
+import numpy
 from A3.Classes.Answer import Answer
 
 ans = Answer()
 
-ans.warm_up_cut_off(n_elevators=5, T=60*60*8,
-                    n_runs=1000, modulo_for_printing=8)
+# for elevator in [1, 2, 3, 5]:
+ans.question_1_5(n_elevators=5, n_runs=300, q5=True)

@@ -131,8 +131,69 @@ class Answer:
         plt.show()
         plt.close()
 
-    def question_1(self):
-        pass
+    def question_1_5(self, n_elevators, n_runs, q5=False):
+
+        # Create a helper function to run a single simulation
+        # do it in here so it knows many of the local variables present in this function
+        def get_wait_times_single_sim(n_elevators, ith_run):
+            """
+            Helper function, which runs a single simulation and returns the results.
+            In the form of a dictionary containing the list of waiting times for each person,
+            and the number of people.
+
+            :param T:           int. The time the simulation runs, in seconds.
+            :param n_elevators: int. The number of elevators in the system.
+            :param ith_run:     int. The number specifying which simulation run this is.
+            """
+            if ith_run % 8 == 0:
+                print("\r Simulation: " + str(ith_run) +
+                      "/" + str(n_runs), end="")
+                print()
+
+            # Simualte a game and calculate the results
+            simulation = Simulation(
+                T=40000, nr_elevators=n_elevators, extension_5=q5)
+            results = simulation.simulate()
+            results.make_calculations()
+
+            # Return the results
+            return {
+                'mean_wait_times': results.mean_waiting_time
+            }
+
+        # Check nr of cores for parallelization
+        num_cores = multiprocessing.cpu_count()
+
+        # Simulate n_runs in parallel
+        sim_results = Parallel(n_jobs=num_cores)(delayed(get_wait_times_single_sim)(n_elevators, i)
+                                                 for i in range(n_runs))
+
+        # Get the mean waiting times per floor for each simulation
+        all_wait_times = [sim_result['mean_wait_times']
+                          for sim_result in sim_results]
+
+        # Mean wait times per floor
+        mean_waiting_times_per_floor = np.mean(all_wait_times, axis=0)
+        # St dev of mean wait times per floor
+        st_dev_mean_wait_times_per_floor = np.std(all_wait_times, axis=0)
+
+        result_output = f"{n_elevators} elevators, {n_runs} runs\n \n"
+        result_output += "="*50 + "\n \n"
+
+        for floor in range(5):
+            mean_wait_time = mean_waiting_times_per_floor[floor]
+            st_dev_mean_wait_times = st_dev_mean_wait_times_per_floor[floor]
+
+            half_width = 1.96 * st_dev_mean_wait_times / np.sqrt(n_runs)
+
+            ci = [mean_wait_time - half_width, mean_wait_time + half_width]
+
+            result_output += \
+                f"Floor {floor}: mean wait time: {mean_wait_time} --- 95% CI: ({ci})\n"
+
+        # create a new file and write the string to it
+        with open(f"Q{5 if q5 else 1}. {n_elevators} elevators, {n_runs} runs.txt", 'w') as f:
+            f.write(result_output)
 
     def question_2(self, n_runs, sim_time):
         """
@@ -252,16 +313,6 @@ class Answer:
         print("Q4: chance to wait long per nr of elevators:")
         print([str(i) + ":" + str(chance_per_nr_elevators[i]) +
               "\n" for i in range(len(chance_per_nr_elevators))])
-
-    def question_5(self, n_runs, sim_time):
-        """
-                        Method to answer question 5.
-
-                        :param n_runs:      The number of simulations
-                        :param sim_time:    The time each simulation runs, seconds.
-        """
-        # copy-paste code Q1 but with extension_5 = true for the simulation calls
-        pass
 
     def question_6(self, n_runs=1000, sim_time=40000, elevators=[5, 7, 8, 9, 11]):
         """

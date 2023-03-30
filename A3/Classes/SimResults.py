@@ -21,7 +21,7 @@ class SimulateResults:
         # Variables to store the results.
         # The mean waiting time per floor.
         self.mean_waiting_time = [-1]*nr_floors
-        # Tme standard deviation per floor.
+        # The standard deviation per floor.
         self.sd_waiting_time = [-1]*nr_floors
         # The mean value of people in the elevator.
         self.mean_people_in_elevator = -1
@@ -75,8 +75,6 @@ class SimulateResults:
 
         # Switch make_calculations_executed to True.
         self.make_calculations_executed = True
-
-        print(f"Cutoff at {self.cut_off}")
 
         # Cut of the first x persons.
         self.list_of_persons = self.list_of_persons[self.cut_off:]
