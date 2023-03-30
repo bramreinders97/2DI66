@@ -32,7 +32,7 @@ class Elevator:
                     tmp_person.took_stairs = True
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time
+                    tmp_person.enter_elevator = current_time - 1
                     self.people.append(tmp_person)
                     return False
         else:
@@ -44,7 +44,7 @@ class Elevator:
                     tmp_person.took_stairs = True
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time
+                    tmp_person.enter_elevator = current_time - 1
                     self.people.append(tmp_person)
                     return False
 
