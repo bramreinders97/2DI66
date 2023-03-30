@@ -32,7 +32,7 @@ class Elevator:
                     tmp_person.took_stairs = True
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time
+                    tmp_person.enter_elevator = current_time-1
                     self.people.append(tmp_person)
                     return False
         else:
@@ -44,7 +44,7 @@ class Elevator:
                     tmp_person.took_stairs = True
                     return tmp_person
                 else:
-                    tmp_person.enter_elevator = current_time
+                    tmp_person.enter_elevator = current_time-1
                     self.people.append(tmp_person)
                     return False
 
@@ -56,7 +56,7 @@ class Elevator:
         for i in range(len(self.people)):
             if self.people[i].destination == self.floor:
                 tmp_person = self.people.pop(i)
-                tmp_person.leave_elevator = current_time+1  # +1 because he needs one second to leave the elevator.
+                tmp_person.leave_elevator = current_time
                 return tmp_person
                 break
 
