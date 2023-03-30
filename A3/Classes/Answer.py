@@ -165,7 +165,7 @@ class Answer:
 
 
 
-    def question_3(self, n_runs=10, sim_time=40000, elevators=[5, 7, 8, 9, 11], n_floors=5):
+    def question_3(self, n_runs=21, sim_time=40000, elevators=[5, 7, 8, 9, 11], n_floors=5):
         """
         Method to answer question 3.
 
@@ -208,14 +208,19 @@ class Answer:
                 hw_per_elevator_and_floor[i][j] = 1.96 * \
                     np.sqrt(sd_per_elevator_and_floor[i][j] ** 2 / n_runs)
 
+        np.set_printoptions(suppress=True)
         # print the results
         print()
         print()
         print("probabilities matrix")
-        print(np.round(mean_per_elevator_and_floor, 5))
+        print(np.round(mean_per_elevator_and_floor, 6))
+        print()
+        print("std matrix")
+        print(np.round(sd_per_elevator_and_floor, 6))
         print()
         print("half widths matrix")
-        print(np.round(hw_per_elevator_and_floor, 5))
+        print(np.round(hw_per_elevator_and_floor, 6))
+        np.set_printoptions(suppress=False)
 
     def question_4(self, n_runs, sim_time):
         """
@@ -255,7 +260,7 @@ class Answer:
         #copy-paste code Q1 but with extension_5 = true for the simulation calls
         pass
 
-    def question_6(self, n_runs=10, sim_time=40000, elevators=[5, 7, 8, 9, 11]):
+    def question_6(self, n_runs=1000, sim_time=40000, elevators=[5, 7, 8, 9, 11]):
         """
         Method to answer question 6.
 
