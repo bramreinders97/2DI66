@@ -3,7 +3,7 @@ import numpy as np
 
 class SimulateResults:
 
-    def __init__(self, extension_6, nr_floors=5):
+    def __init__(self, extension_6, nr_floors=5, n_elevators=1):
         """
         Class that keeps track of the important data and calculates the results.
         Attention: Only the "overall" variables are defined if extension 6 is activated.
@@ -11,11 +11,6 @@ class SimulateResults:
         :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
         """
-
-        # Variable to control the data collection
-        # The time after which peoples data is collected (warm up time)
-        self.cut_off = -1
-
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.
         # List of all people in elevator of all (up/down) movements.
@@ -64,7 +59,11 @@ class SimulateResults:
         # variable for question 4
         self.chance_over_5_min_wait = None
 
-    def make_calculations(self, cut_off=2028):
+        # Based on the number of elevators, decide the cutoff
+        # 1, 2, 3 elevators don't have a cutoff becasue no steady state is reached
+        self.cut_off = [0, 0, 0, 224, 70][n_elevators - 1]
+
+    def make_calculations(self):
         """
         Method that decides which calculations need to be done and calls the corresponding method.
         This method needs to be executed in order to have correct values in the variables used to store the results.
@@ -77,10 +76,10 @@ class SimulateResults:
         # Switch make_calculations_executed to True.
         self.make_calculations_executed = True
 
-        # Save how many people were cut off
-        self.cut_off = cut_off
+        print(f"Cutoff at {self.cut_off}")
+
         # Cut of the first x persons.
-        self.list_of_persons = self.list_of_persons[cut_off:]
+        self.list_of_persons = self.list_of_persons[self.cut_off:]
 
         if len(self.list_of_persons) < 1:
             print("no persons in self.list_of_persons the simulation is not long enough or the cut off is to large")
