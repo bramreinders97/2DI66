@@ -5,7 +5,7 @@ import heapq
 
 class Simulation:
 
-    def __init__(self, T, nr_elevators, probs = None, arrive_rate =(13.1, 3.4, 2.1, 9.2, 8.8)):
+    def __init__(self, T, nr_elevators, probs = None, arrive_rate =(13.1, 3.4, 2.1, 9.2, 8.8), extension_5=False):
         """
         Prepares a single simulation to be ran for A3, creating elevators.
         :param T: The ending time for this simulation
@@ -23,7 +23,7 @@ class Simulation:
                      [0.5, 0.2, 0.2, 0.1, 0]]
 
         self.elevators = [Elevator(i) for i in range(nr_elevators)]
-        self.floors = [Floor(i, probs[i], arrive_rate[i]) for i in range(5)]
+        self.floors = [Floor(i, probs[i], arrive_rate[i], extension_5=extension_5) for i in range(5)]
 
         self.event_list = [] #list of events that still need to happen during simulation
         #types of events: enter elevator, leave elevator, elevator reaches a new floor, person arrives at queue
@@ -65,7 +65,7 @@ class Simulation:
                     simulation_results.people_in_elevator_list.append(additional_data)
                 elif 2 == event.event_type and additional_data:  # Save the person in the list of impatient persons.
                     #simulation_results.add_to_list_impatient_persons(additional_data, self.t)
-                    simulation_results.list_impatient_persons.append(additional_data)
+                    simulation_results.list_of_persons.append(additional_data)
                 elif 3 == event.event_type:  # Save the finished person in list
                     #simulation_results.add_to_list_of_persons(additional_data, self.t)
                     simulation_results.list_of_persons.append(additional_data)

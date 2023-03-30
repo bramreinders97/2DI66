@@ -29,6 +29,7 @@ class Elevator:
 
                 # Check if the person took the stairs (only if extension 6 is active)
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    tmp_person.took_stairs = True
                     return tmp_person
                 else:
                     tmp_person.enter_elevator = current_time
@@ -40,6 +41,7 @@ class Elevator:
 
                 # Check if the person took the stairs (only if extension 6 is active)
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
+                    tmp_person.took_stairs = True
                     return tmp_person
                 else:
                     tmp_person.enter_elevator = current_time
@@ -77,9 +79,9 @@ class Elevator:
         #schedule next event with time adjustment
         next_event = self.schedule_next_event(t, current_floor)
         if next_event.event_type == 1:
-            next_event.t = t+6      # Comment 1 part 1: Why overwriting next_event.t ?
+            next_event.t = t+6      # Overwriting the time that assumes we still need to close the doors
         else:
-            next_event.t += np.random.exponential(3)
+            next_event.t += np.random.exponential(3) #adding the time for the doors to open to a person entering or leaving
         return next_event
 
     def schedule_next_event(self, t, current_floor : Floor):
@@ -123,6 +125,6 @@ class Elevator:
             new_floor = self.floor-1
 
         #new time: +6s + closing doors exponential mean 3
-        new_time = t + 6 +  np.random.exponential(3)  # Comment 1 part 2: I think you are setting the time here already.
+        new_time = t + 6 +  np.random.exponential(3)  # Time to reach next floor, including closing the doors
         return Event(1, new_time, self, None, new_floor)
 

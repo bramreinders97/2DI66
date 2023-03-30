@@ -35,4 +35,6 @@ class Person():
         self.floor_nr = floor_nr        # The floor number where the person enters the elevator.
         self.could_not_enter_count = 0  # Counts how often a person could not enter.
 
+        self.took_stairs = False        # Whether a person took the stairs due to impatience.
+
 

@@ -21,7 +21,7 @@ class SimulateResults:
         # List of all people in elevator of all (up/down) movements.
         self.people_in_elevator_list = []
         # List of people who took the stairs because they were too impatient.
-        self.list_impatient_persons = []
+        # self.list_impatient_persons = []
 
         # Variables to store the results.
         # The mean waiting time per floor.
@@ -37,7 +37,7 @@ class SimulateResults:
         # The probability not being able to enter the elevator for floor i.
         self.prob_not_to_enter = [-1]*nr_floors
 
-        # Overall variables.
+        # Overall variables. Metrics over all floors combined.
         # The overall mean waiting time over all floors.
         self.overall_mean_waiting_time = -1
         # The overall standard deviation over all floors.
@@ -46,6 +46,12 @@ class SimulateResults:
         self.overall_mean_waiting_time_2 = -1
         # The overall sd waiting time including people left due to impatience.
         self.overall_sd_waiting_time_2 = -1
+        # The overall mean "impatience time". So mean time until a person will take the stairs.
+        self.overall_mean_impatience = -1
+        # The overall sd "impatience time". So mean time until a person will take the stairs.
+        self.overall_sd_impatience = -1
+        # The overall number of people took the stairs because of impatience.
+        self.overall_percentage_stairs = -1
 
         # Other variables
         # The number of floors of the system. For computational reasons.
@@ -71,7 +77,7 @@ class SimulateResults:
         # Switch make_calculations_executed to True.
         self.make_calculations_executed = True
 
-        # Save how many people where cut off
+        # Save how many people were cut off
         self.cut_off = cut_off
         # Cut of the first x persons.
         self.list_of_persons = self.list_of_persons[cut_off:]
@@ -103,7 +109,7 @@ class SimulateResults:
 
         # Sum over all finished persons
         for i, person in enumerate(self.list_of_persons):
-            tmp_waiting_time = person.enter_elevator - person.start_time
+            tmp_waiting_time = person.enter_elevator - person.start_time - 1
             waiting_times[person.floor_nr].append(tmp_waiting_time)
             self.one_dim_list_of_waiting_times[i] = tmp_waiting_time
 
@@ -167,22 +173,40 @@ class SimulateResults:
 
         # Define 2D-list of all waiting times and floors.
         waiting_times = []
+        impatient_times = []
+
+        # Calculation for percentage. Sum over all people who took the stairs/elevator.
+        sum_elevator = 0
+        sum_stairs = 0
 
         # Sum over all finished persons
         for person in self.list_of_persons:
-            tmp_waiting_time = person.enter_elevator - person.start_time
-            waiting_times.append(tmp_waiting_time)
+            impatient_times.append(person.impatience)
+            if not person.took_stairs:
+                sum_elevator += 1
+                tmp_waiting_time = person.enter_elevator - person.start_time
+                waiting_times.append(tmp_waiting_time)
 
         self.overall_mean_waiting_time = np.mean(waiting_times)
         self.overall_sd_waiting_time = np.std(waiting_times)
 
+        # Calculate the mean impatience time.
+        self.overall_mean_impatience = np.mean(impatient_times)
+        self.overall_sd_impatience = np.std(impatient_times)
+
         # Sum over all finished persons
-        for person in self.list_impatient_persons:
-            tmp_waiting_time = person.impatience
-            waiting_times.append(tmp_waiting_time)
+        for person in self.list_of_persons:
+            if person.took_stairs:
+                sum_stairs += 1
+                tmp_waiting_time = person.impatience
+                waiting_times.append(tmp_waiting_time)
 
         self.overall_mean_waiting_time_2 = np.mean(waiting_times)
         self.overall_sd_waiting_time_2 = np.std(waiting_times)
+
+        # Calculate the percentage
+        self.overall_percentage_stairs = sum_stairs / \
+            (sum_elevator + sum_stairs)
 
     def __str__(self):
         """
