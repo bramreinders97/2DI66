@@ -229,7 +229,7 @@ class Answer:
             print(
                 f"{i+1} Elevators: mean {nr_people[i]}, {conf_interval_nr_people[i]}")
 
-    def question_3(self, n_runs=21, sim_time=40000, elevators=[5, 7, 8, 9, 11], n_floors=5):
+    def question_3(self, n_runs=1000, sim_time=40000, elevators=[1, 2, 3, 4, 5], n_floors=5):
         """
         Method to answer question 3.
 
@@ -314,7 +314,7 @@ class Answer:
         print([str(i) + ":" + str(chance_per_nr_elevators[i]) +
               "\n" for i in range(len(chance_per_nr_elevators))])
 
-    def question_6(self, n_runs=1000, sim_time=40000, elevators=[5, 7, 8, 9, 11]):
+    def question_6(self, n_runs=1000, sim_time=40000, elevators=[1, 2, 3, 4, 5]):
         """
         Method to answer question 6.
 
@@ -323,15 +323,16 @@ class Answer:
         :param elevators:   List of values for the total number of elevators the system has.
         """
 
-        # mean and sd of waiting times over all runs
+        # mean over all runs
         mean_waiting_times = np.zeros((len(elevators), n_runs))
-        sd_waiting_times = np.zeros((len(elevators), n_runs))
-        # mean and sd of waiting times over all runs including people who left the system due to impatience.
+
+        # mean waiting times over all runs including people who left the system due to impatience.
         mean_waiting_times_2 = np.zeros((len(elevators), n_runs))
-        sd_waiting_times_2 = np.zeros((len(elevators), n_runs))
+
         # mean and sd of the impatience time.
         mean_impatience_times = np.zeros((len(elevators), n_runs))
         sd_impatience_times = np.zeros((len(elevators), n_runs))
+
         # percentage of people took the stairs
         percentage_stairs = np.zeros((len(elevators), n_runs))
 
@@ -349,12 +350,11 @@ class Answer:
                 results = simulation.simulate(True)
                 results.make_calculations()
 
-                # sum up the results.
+                # sum up the results for the mean
                 mean_waiting_times[j][i] = results.overall_mean_waiting_time
-                sd_waiting_times[j][i] = results.overall_sd_waiting_time
 
+                # sum up the results for the mean including impatience people.
                 mean_waiting_times_2[j][i] = results.overall_mean_waiting_time_2
-                sd_waiting_times_2[j][i] = results.overall_sd_waiting_time_2
 
                 mean_impatience_times[j][i] = results.overall_mean_impatience
                 sd_impatience_times[j][i] = results.overall_sd_impatience
@@ -368,14 +368,18 @@ class Answer:
         mean_percentage_stairs = np.mean(percentage_stairs, 1)
 
         # Calculate mean standard deviations.
-        sd_waiting_time = np.mean(sd_waiting_times, 1)
-        sd_waiting_time_2 = np.mean(sd_waiting_times_2, 1)
+        sd_waiting_time = np.std(mean_waiting_times, 1)
+        sd_waiting_time_2 = np.std(mean_waiting_times_2, 1)
         sd_impatience_time = np.mean(sd_impatience_times, 1)
+        sd_percentage_stairs = np.std(percentage_stairs, 1)
 
         # Calculate half widths.
         half_width = 1.96 * np.sqrt(sd_waiting_time**2 / n_runs)
         half_width_2 = 1.96 * np.sqrt(sd_waiting_time_2**2 / n_runs)
         half_width_3 = 1.96 * np.sqrt(sd_impatience_time ** 2 / n_runs)
+        half_width_4 = 1.96 * np.sqrt(sd_percentage_stairs ** 2 / n_runs)
+
+        np.set_printoptions(suppress=True)
 
         # print the results.
         print()
@@ -383,20 +387,22 @@ class Answer:
         print("results for question 6")
         print("elevators: " + str(elevators))
         print("#################################")
-        print("mean waiting time: " + str(mean_waiting_time))
-        print("standard deviation: " + str(sd_waiting_time))
-        print("half width: " + str(half_width))
+        print("mean waiting time: " + str(np.round(mean_waiting_time, 2)))
+        print("standard deviation: " + str(np.round(sd_waiting_time, 2)))
+        print("half width: " + str(np.round(half_width, 2)))
         print("---------------------------------")
-        print("mean waiting time 2: " + str(mean_waiting_time_2))
-        print("standard deviation: " + str(sd_waiting_time_2))
-        print("half width: " + str(half_width_2))
+        print("mean waiting time 2: " + str(np.round(mean_waiting_time_2, 2)))
+        print("standard deviation: " + str(np.round(sd_waiting_time_2, 2)))
+        print("half width: " + str(np.round(half_width_2, 2)))
         print("---------------------------------")
         print("percentage of people left the system: " +
-              str(mean_percentage_stairs))
+              str(np.round(mean_percentage_stairs, 4)))
+        print("hw of people left the system: " +
+              str(np.round(half_width_4, 4)))
         print("---------------------------------")
-        print("mean impatience time: " + str(mean_impatience_time))
-        print("standard deviation: " + str(sd_impatience_time))
-        print("half width: " + str(half_width_3))
+        print("mean impatience time: " + str(np.round(mean_impatience_time, 2)))
+        print("standard deviation: " + str(np.round(sd_impatience_time, 2)))
+        print("half width: " + str(np.round(half_width_3, 2)))
         print("#################################")
 
         # Simulate the system again without extension 6.
@@ -436,7 +442,9 @@ class Answer:
         print("results for question 6 without using the extension")
         print("elevators: " + str(elevators))
         print("#################################")
-        print("mean waiting time: " + str(mean_waiting_time))
-        print("standard deviation: " + str(sd_waiting_time))
-        print("half width: " + str(half_width))
+        print("mean waiting time: " + str(np.round(mean_waiting_time, 2)))
+        print("standard deviation: " + str(np.round(sd_waiting_time, 2)))
+        print("half width: " + str(np.round(half_width, 2)))
         print("#################################")
+
+        np.set_printoptions(suppress=False)
