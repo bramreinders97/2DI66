@@ -277,13 +277,13 @@ class Answer:
         print()
         print()
         print("probabilities matrix")
-        print(np.round(mean_per_elevator_and_floor, 6))
+        print(np.round(mean_per_elevator_and_floor, 4))
         print()
         print("std matrix")
-        print(np.round(sd_per_elevator_and_floor, 6))
+        print(np.round(sd_per_elevator_and_floor, 4))
         print()
         print("half widths matrix")
-        print(np.round(hw_per_elevator_and_floor, 6))
+        print(np.round(hw_per_elevator_and_floor, 5))
         np.set_printoptions(suppress=False)
 
     def question_4(self, n_runs, sim_time):
