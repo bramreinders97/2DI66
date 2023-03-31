@@ -30,7 +30,7 @@ class Simulation:
         self.event_list = []  # list of events that still need to happen during simulation
         # types of events: enter elevator, leave elevator, elevator reaches a new floor, person arrives at queue
 
-    def simulate(self, extension_6=False, warm_up=60*60):
+    def simulate(self, extension_6=False):
         """
         Run a simulation with the given parameters
 
