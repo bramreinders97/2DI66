@@ -61,7 +61,7 @@ class SimulateResults:
 
         # Based on the number of elevators, decide the cutoff
         # 1, 2, 3 elevators don't have a cutoff becasue no steady state is reached
-        self.cut_off = [0, 0, 0, 224, 70][n_elevators - 1]
+        self.cut_off = [0, 0, 0, 224, 70,70,70,70,70,70,70,70][n_elevators - 1]
 
     def make_calculations(self):
         """

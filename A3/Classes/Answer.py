@@ -205,7 +205,7 @@ class Answer:
         start_time = time()
         nr_people = []
         conf_interval_nr_people = []
-        for nr_elevators in range(1, 5):
+        for nr_elevators in range(1, 6):
             this_elevator = []
             for i in range(n_runs):
                 simulation = Simulation(sim_time, nr_elevators)
@@ -214,7 +214,7 @@ class Answer:
                 this_elevator.append(results.mean_people_in_elevator)
             # summarize results for this elevator
             nr_people.append(sum(this_elevator)/n_runs)
-            sd = sum([(i-nr_people[-1])**2 for i in this_elevator])/n_runs
+            sd = (sum([(i-nr_people[-1])**2 for i in this_elevator])/n_runs)**0.5
             sd1 = sd*1.96/(n_runs**0.5)
             conf_interval_nr_people.append(
                 [nr_people[-1]+sd1, nr_people[-1]-sd1])
