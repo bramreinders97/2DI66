@@ -107,7 +107,7 @@ class SimulateResults:
 
         # Sum over all finished persons
         for i, person in enumerate(self.list_of_persons):
-            tmp_waiting_time = person.enter_elevator - person.start_time - 1
+            tmp_waiting_time = person.enter_elevator - person.start_time
             waiting_times[person.floor_nr].append(tmp_waiting_time)
             self.one_dim_list_of_waiting_times[i] = tmp_waiting_time
 
