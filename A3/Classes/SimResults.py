@@ -79,6 +79,7 @@ class SimulateResults:
         # Cut of the first x persons.
         self.list_of_persons = self.list_of_persons[self.cut_off:]
 
+        # Check whether there are still people in the list.
         if len(self.list_of_persons) < 1:
             print("no persons in self.list_of_persons the simulation is not long enough or the cut off is to large")
             return
@@ -94,7 +95,7 @@ class SimulateResults:
         Method that does all the necessary calculations in the normal case (extension 6 not activated)
         """
 
-        # Calculate mean waiting time.
+        # Calculate mean waiting time and sd.
         ##########################################
 
         # Define 2D-list of all waiting times and floors.
@@ -110,23 +111,24 @@ class SimulateResults:
             waiting_times[person.floor_nr].append(tmp_waiting_time)
             self.one_dim_list_of_waiting_times[i] = tmp_waiting_time
 
+        # Calculate the mean
         for i in range(self.nr_floors):
             self.mean_waiting_time[i] = np.mean(waiting_times[i])
 
         # Calculate standard deviation of the waiting times per floor
-        ##########################################
         for i in range(self.nr_floors):
             self.sd_waiting_time[i] = np.std(waiting_times[i])
 
-        # Calculate mean waiting time over all floors.
+        # Calculate mean waiting time and sd over all floors.
         ##########################################
+
+        # Put everything into one list.
         all_waiting_times = []
         for i in range(len(waiting_times)):
             all_waiting_times += waiting_times[i]
-        self.overall_mean_waiting_time = np.mean(all_waiting_times)
 
-        # Calculate sd of the waiting times over all floors.
-        ##########################################
+        # Calculate the mean and standard deviation.
+        self.overall_mean_waiting_time = np.mean(all_waiting_times)
         self.overall_sd_waiting_time = np.std(all_waiting_times)
 
         # Calculate mean and sd of people in the elevator.
@@ -141,16 +143,19 @@ class SimulateResults:
         total_could_not_enter = [0] * self.nr_floors
         total_possibilities = [0] * self.nr_floors
 
-        # Sum over all persons and the count how often they were not able to enter an elevator.
+        # Sum over all persons and count how often they were not able to enter an elevator.
         count_wait_over_5_min = 0
         for person in self.list_of_persons:
+            # Sum how often someone was not able to board.
             total_could_not_enter[person.floor_nr] += person.could_not_enter_count
+            # Sum how often someone "tried" to board.
             # +1 because everybody was able to enter eventually.
             total_possibilities[person.floor_nr] += person.could_not_enter_count + 1
 
             # check how many waited over 5 minutes
             if person.start_time + 300 < person.enter_elevator:
                 count_wait_over_5_min += 1
+
         # calculate fraction of people waiting over 5 minutes
         self.chance_over_5_min_wait = count_wait_over_5_min / \
             len(self.list_of_persons)
@@ -172,32 +177,41 @@ class SimulateResults:
         waiting_times = []
         impatient_times = []
 
-        # Calculation for percentage. Sum over all people who took the stairs/elevator.
-        sum_elevator = 0
-        sum_stairs = 0
+        # Sums in order to calculate percentages. Sum over all people who took the stairs/elevator.
+        sum_elevator = 0    # Sum of people who could take the elevator.
+        sum_stairs = 0      # Sum of people who took the stairs.
 
         # Sum over all finished persons
         for person in self.list_of_persons:
+
+            # record the "impatience" time
             impatient_times.append(person.impatience)
+
+            # record the waiting time of the persons who were able to use the elevator.
             if not person.took_stairs:
-                sum_elevator += 1
+                sum_elevator += 1   # Also keep track of the sum.
                 tmp_waiting_time = person.enter_elevator - person.start_time
                 waiting_times.append(tmp_waiting_time)
 
+        # Calculate the mean waiting time and the corresponding standard deviation.
         self.overall_mean_waiting_time = np.mean(waiting_times)
         self.overall_sd_waiting_time = np.std(waiting_times)
 
-        # Calculate the mean impatience time.
+        # Calculate the mean impatience time and the corresponding standard deviation.
         self.overall_mean_impatience = np.mean(impatient_times)
         self.overall_sd_impatience = np.std(impatient_times)
 
-        # Sum over all finished persons
+        # Sum over all finished persons in order to include them into the calculations. (mean number 2)
         for person in self.list_of_persons:
+
+            # Only look at the persons who took the stairs.
             if person.took_stairs:
-                sum_stairs += 1
+                sum_stairs += 1     # Keep track of the sum.
                 tmp_waiting_time = person.impatience
                 waiting_times.append(tmp_waiting_time)
 
+        # Calculate the mean impatience time and the corresponding standard deviation.
+        # This time all people are included not only the ones who were able to take the elevator.
         self.overall_mean_waiting_time_2 = np.mean(waiting_times)
         self.overall_sd_waiting_time_2 = np.std(waiting_times)
 
@@ -220,6 +234,9 @@ class SimulateResults:
 
         # Check if extension 6 is activated.
         if not self.extension_6:
+
+            # Print the string.
+
             tmp_str += "\nresults\n##################################\n"
             tmp_str += "overall mean waiting time: " + \
                 str(np.round(self.overall_mean_waiting_time, 2)) + "\n"
@@ -244,6 +261,9 @@ class SimulateResults:
             tmp_str += "\n##################################\n"
 
         else:
+
+            # Print another string.
+
             tmp_str += "\nresults\n##################################\n"
 
             tmp_str += "mean waiting time: " + \
