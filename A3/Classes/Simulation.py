@@ -38,6 +38,7 @@ class Simulation:
         :return:
         """
 
+        # must be defined to collect the data.
         simulation_results = SimulateResults(
             extension_6, n_elevators=len(self.elevators))
 

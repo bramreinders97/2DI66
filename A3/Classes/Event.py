@@ -24,6 +24,8 @@ class Event:
     def handle_event(self, extension_6):
         """
         Calls functions in respective classes to handle each type of event
+
+        :param extension_6: Whether a system of impatience is implemented.
         :return:
         """
 

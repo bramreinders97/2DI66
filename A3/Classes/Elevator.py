@@ -21,6 +21,10 @@ class Elevator:
     def add_person(self, floor, current_time, extension_6):
         """
         Have a person enter the elevator, if possible
+
+        :param floor: the current floor.
+        :param current_time: the current time of the system.
+        :param extension_6: whether a system of impatience is implemented.
         :return:
         """
         if self.going_up:
@@ -28,10 +32,13 @@ class Elevator:
                 tmp_person = floor.up_queue.pop(0)
 
                 # Check if the person took the stairs (only if extension 6 is active)
+                # And leaves therefore leaves the system.
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
                     tmp_person.took_stairs = True
+                    # return the person so that it is saved.
                     return tmp_person
                 else:
+                    # normal program flow.
                     tmp_person.enter_elevator = current_time - 1
                     self.people.append(tmp_person)
                     return False
@@ -42,8 +49,10 @@ class Elevator:
                 # Check if the person took the stairs (only if extension 6 is active)
                 if extension_6 and (current_time - tmp_person.start_time) >= tmp_person.impatience:
                     tmp_person.took_stairs = True
+                    # return the person so that it is saved.
                     return tmp_person
                 else:
+                    # normal program flow.
                     tmp_person.enter_elevator = current_time - 1
                     self.people.append(tmp_person)
                     return False
@@ -51,6 +60,8 @@ class Elevator:
     def remove_person(self, current_time):
         """
         Remove a person with this floor as destination from the elevator.
+
+        :param current_time: The current time of the system.
         :return:
         """
         for i in range(len(self.people)):

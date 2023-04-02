@@ -37,7 +37,13 @@ class Floor():
         return Event(0, t+np.random.exponential(1/self.arrive_rate), floor = self)
 
     def new_queuer(self, t, extension_6):
-        #choose destination for person based on probs
+        """
+        Adds a new person to the correct queue
+        :param t: The time of the system.
+        :param extension_6: Whether a system of impatience is implemented.
+        :return:
+        """
+        # choose destination for person based on probs
         destination = np.random.choice([0,1,2,3,4], p = self.probs)
         self.add_to_queue(Person(destination, t, self.floor_nr, extension_6))
         return self.schedule_next_event(t)
