@@ -406,7 +406,7 @@ class Answer:
         print("#################################")
 
         # Simulate the system again without extension 6.
-
+        
         print()
         print()
 
