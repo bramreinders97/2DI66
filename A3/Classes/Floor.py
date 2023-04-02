@@ -48,7 +48,7 @@ class Floor():
         Adds a new person to the correct queue
         :param t: The time of the system.
         :param extension_6: Whether a system of impatience is implemented.
-        :return:
+        :return: The next new_queuer event for this floor
         """
         # choose destination for person based on probs
         destination = np.random.choice([0,1,2,3,4], p = self.probs)
