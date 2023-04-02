@@ -10,6 +10,7 @@ class SimulateResults:
 
         :param extension_6: Bool. True if extension 6 is activated.
         :param nr_floors:   The total number of floors the system has.
+        :param n_elevators: The total number of elevators in the system.
         """
         # Variables to store the data.
         self.list_of_persons = []           # List of all persons who finished.

@@ -272,6 +272,7 @@ class Answer:
                 hw_per_elevator_and_floor[i][j] = 1.96 * \
                     np.sqrt(sd_per_elevator_and_floor[i][j] ** 2 / n_runs)
 
+        # Avoid scientific notation for numbers.
         np.set_printoptions(suppress=True)
         # print the results
         print()
@@ -379,6 +380,7 @@ class Answer:
         half_width_3 = 1.96 * np.sqrt(sd_impatience_time ** 2 / n_runs)
         half_width_4 = 1.96 * np.sqrt(sd_percentage_stairs ** 2 / n_runs)
 
+        # Avoid scientific notation for numbers.
         np.set_printoptions(suppress=True)
 
         # print the results.
@@ -406,7 +408,7 @@ class Answer:
         print("#################################")
 
         # Simulate the system again without extension 6.
-
+        
         print()
         print()
 

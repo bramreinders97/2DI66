@@ -45,12 +45,12 @@ class Floor():
 
     def new_queuer(self, t, extension_6):
         """
-        Create a new queuer who showed up at this floor. Return the event for creating the next queuer.
-        :param t: Current time
-        :param extension_6: Boolean whether extension 6 is active
-        :return: The next new_queuer event for this floor
+        Adds a new person to the correct queue
+        :param t: The time of the system.
+        :param extension_6: Whether a system of impatience is implemented.
+        :return:
         """
-        #choose destination for person based on probs
+        # choose destination for person based on probs
         destination = np.random.choice([0,1,2,3,4], p = self.probs)
         self.add_to_queue(Person(destination, t, self.floor_nr, extension_6))
         return self.schedule_next_event(t)
