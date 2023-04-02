@@ -10,6 +10,8 @@ class Elevator:
     def __init__(self, id):
         """
         Class that represents an elevator. Has a current floor, open-close state, direction (up or down) and list of people inside it.
+
+        :param id: The identification number of this elevator
         """
 
         self.id_nr = id
@@ -21,8 +23,13 @@ class Elevator:
     def add_person(self, floor, current_time, extension_6):
         """
         Have a person enter the elevator, if possible
-        :return:
+        :param floor: Floor object for the floor the elevator is at
+        :param current_time: current time
+        :param extension_6: boolean whether extension 6 is active.
+        :return: The person who has gone up the stairs as per extensions 6 or 5,
+                 or False if someone entered the elevator.
         """
+        #only check up_queue when going up, down_queue when going down
         if self.going_up:
             if floor.up_queue:
                 tmp_person = floor.up_queue.pop(0)
@@ -51,6 +58,7 @@ class Elevator:
     def remove_person(self, current_time):
         """
         Remove a person with this floor as destination from the elevator.
+        :param current_time: current time.
         :return:
         """
         for i in range(len(self.people)):
@@ -65,9 +73,12 @@ class Elevator:
         """
         Event for reaching a certain floor.
         Schedule another event, but accounting for opening or not closing the doors
-        Change elevator direction as necesary
+        Change elevator direction as necessary
 
-        :return:
+        :param t: current time
+        :param current_floor: floor the elevator arrived at
+        :param destination_floor: destination floor number
+        :return: The next Event regarding this elevator (person entering, leaving or elevator arriving at a floor
         """
         self.floor = destination_floor
 
@@ -92,7 +103,7 @@ class Elevator:
         Finally going to a different floor
 
         :param current_floor: Floor. The current floor the elevator is on
-        :return: Event.
+        :return: Next event for this elevator
         """
 
         #check for leavers

@@ -2,6 +2,7 @@
 
 class Event:
 
+    #helps remember which code is what, not used in code
     NEW_QUEUER = 0
     ELEVATOR_ARRIVES = 1
     ENTER_ELEVATOR = 2
@@ -13,6 +14,9 @@ class Event:
 
         :param event_type:  int.    The type of the event.
         :param t:           float.  The time of the event
+        :param elevator:    Elevator.   The elevator involved in the event, if any
+        :param floor:       Floor.      The floor involved in the event, if any
+        :param destination_floor    int.    The number for the destination of a moving elevator
         """
 
         self.event_type = event_type
@@ -24,7 +28,9 @@ class Event:
     def handle_event(self, extension_6):
         """
         Calls functions in respective classes to handle each type of event
-        :return:
+
+        :param extension_6: boolean whether extension_6 is activated
+        :return: tuple of a new event to add to the stack and additional data to use in results.
         """
 
         additional_data = False

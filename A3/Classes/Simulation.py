@@ -11,6 +11,9 @@ class Simulation:
         Prepares a single simulation to be ran for A3, creating elevators.
         :param T: The ending time for this simulation
         :param nr_elevators: The number of elevators desired in this simulation
+        :param probs: 2-D array or list with probabilities for  destinations from each floor, if None default is used
+        :param arrive_rate: 1-D array or list with arrival rates for each floor, in persons per minute
+        :param extension_5: Boolean. Whether extension 5 is active
         """
 
         self.T = T
